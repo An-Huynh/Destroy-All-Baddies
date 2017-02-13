@@ -3,6 +3,12 @@ package dab.graphic.shader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+/**
+ * Vertex Shader implementation
+ * 
+ * @author An Huynh
+ */
+
 public class VertexShader implements Shader {
 	
 	private int shaderID;
@@ -20,7 +26,7 @@ public class VertexShader implements Shader {
 	 * to a string containing the GLSL
 	 * source code
 	 * 
-	 * @param sourceCode string containing GLSL code for the vertex shaer
+	 * @param sourceCode string containing GLSL code for the vertex shader
 	 */
 	@Override
 	public void loadSource(String sourceCode) {
