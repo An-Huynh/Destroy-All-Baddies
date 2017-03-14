@@ -8,6 +8,8 @@ package dab.graphic.program;
 
 import java.nio.FloatBuffer;
 
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -16,12 +18,14 @@ import dab.graphic.shader.Shader;
 public class Program {
 
     private int programID;
+    private FloatBuffer buffer;
 	
     /**
      * Constructor for Program
      */
     public Program() {
         programID = GL20.glCreateProgram();
+        buffer = BufferUtils.createFloatBuffer(4*4);
     }
 	
     /**
@@ -115,12 +119,14 @@ public class Program {
      * Sets the value of a 4x4 matrix in the program
      * 
      * @param name uniform name
-     * @param buffer containing values from 4x4 matrix
+     * @param translationMatrix containing values from 4x4 matrix
      */
-    public void setUniformMatrix4fv(String name, FloatBuffer buffer) {
-        int uniformLocation = getUniformLocation(name);
-        if (uniformLocation != -1) {
-            GL20.glUniformMatrix4fv(uniformLocation, false, buffer);
+    public void setUniformMatrix4fv(String name, Matrix4f translationMatrix) {
+        int location = getUniformLocation(name);
+        buffer.clear();
+        translationMatrix.get(buffer);
+        if (location != -1) {
+            GL20.glUniformMatrix4fv(location,  false,  buffer);
         }
     }
 }
