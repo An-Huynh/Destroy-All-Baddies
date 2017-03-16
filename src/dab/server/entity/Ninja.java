@@ -8,26 +8,18 @@ package dab.server.entity;
 import dab.server.initialization.EntityList;
 
 public class Ninja extends Entity {
-	/*contructor - default spawn
-	 *
-	 *@param double x position
-	 *@param double y position
-	 *
+	/*
+	 * contructor - default spawn
 	 */
-	public Ninja(){
-		Ninja(0.0,0.0);
-	}
 	
-	public Ninja(double xPos, double yPos) {
-		this.xPos = xPos;
-        this.yPos = yPos;
+	public Ninja() {
         
-        this.name = "genericNinja";
-        this.alive = true;
-        this.health = 50;
-        this.attack = 10;
-        this.speed = 0.6;
+		this.name = "genericNinja";
+		this.alive = true;
+		this.health = 50;
+		this.attack = 10;
+		this.speed = 0.6;
         
-        EntityList.register(this);
+        	EntityList.register(this);
 	}
 }
