@@ -16,9 +16,9 @@ public class Ninja extends Entity {
         
 		this.name = "genericNinja";
 		this.alive = true;
-		this.health = 50;
-		this.attack = 10;
-		this.speed = 0.6;
+		this.maxHealth = 50;
+		this.attackDamage = 10;
+		this.movementSpeed = 0.6;
         
         	EntityList.register(this);
 	}
