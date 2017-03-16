@@ -8,26 +8,16 @@ package dab.server.entity;
 import dab.server.initialization.EntityList;
 
 public class Zombie extends Entity {
-	/*contructor - default spawn
-	 *
-	 *@param double x position
-	 *@param double y position
-	 *
+	/*
+	 *contructor - default spawn
 	 */
-	public Zombie(){
-		Zombie(0.0,0.0);
-	}
-	
-	public Zombie(double xPos, double yPos) {
-		this.xPos = xPos;
-        this.yPos = yPos;
+	public Zombie() {
+		this.name = "genericZombie";
+		this.alive = true;
+		this.maxHealth = 30;
+		this.attackDamage = 5;
+		this.movementSpeed = 0.2;
         
-        this.name = "genericZombie";
-        this.alive = true;
-        this.health = 30;
-        this.attack = 5;
-        this.speed = 0.2;
-        
-        EntityList.register(this);
+        	EntityList.register(this);
 	}
 }
