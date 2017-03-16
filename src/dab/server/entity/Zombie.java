@@ -5,7 +5,7 @@ package dab.server.entity;
  * 
  * @author Cristopher Huerta
  */
-import dab.server.initialization.EntityList;
+import dab.server.resource.EntityList;
 
 public class Zombie extends Entity {
 	/*

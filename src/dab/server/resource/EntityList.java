@@ -1,4 +1,4 @@
-package dab.server.initialization;
+package dab.server.resource;
 
 /**
  * ArrayList of Entity classes
