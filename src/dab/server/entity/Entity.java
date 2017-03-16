@@ -7,12 +7,11 @@ package dab.server.entity;
  */
 
 public abstract class Entity {
-	protected String name; //name of entity
-	protected boolean alive; //entity alive status
-	protected int health;	//health of entity
-	protected int attack; //attack power of entity
-	protected double xPos, yPos; //x and y positions of entity
-	protected double speed; //movement speed of entity
+	protected String name;          //name of entity
+	protected boolean alive;        //entity alive status
+	protected int maxHealth;        // maximum health of entity
+	protected int attackDamage;     //attack power of entity
+	protected double movementSpeed; //movement speed of entity
 	
 	public Entity(){
 	}
