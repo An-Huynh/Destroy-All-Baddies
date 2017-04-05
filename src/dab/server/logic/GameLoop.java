@@ -2,48 +2,48 @@ package dab.server.logic;
 
 import java.util.ArrayList;
 
-import dab.common.loop.Tickable;
+import dab.server.logic.component.Tickable_S;
+import dab.server.players.PlayerList;
 
 public class GameLoop {
 	
-	private static final ArrayList<Tickable> components = new ArrayList<Tickable>();
-	private boolean stop;
+	private static ArrayList<Tickable_S> components = new ArrayList<Tickable_S>();
+	private PlayerList playerList;
 	
-	public GameLoop() {
-		this.stop = false;
+	private boolean running;
+	
+	public GameLoop(PlayerList playerList) {
+		this.playerList = playerList;
+		running = false;
 	}
 	
-	public void stop() {
-		this.stop = true;
-	}
-	
-	
-	private void tick() {
-		for (int i = 0; i < components.size(); ++i) {
-			components.get(i).update();
-		}
-	}
-	
-	public static void registerTickable(Tickable tickable) {
-		components.add(tickable);
-	}
-	
-	public void run() {
+	public void run() throws InterruptedException {
+		running = true;
 		final double tickRate = 30.0;
 		final double deltaTime = 1000/tickRate;
 		double targetUpdateTime = System.currentTimeMillis();
-		
-		while (!stop) {
-			tick();
+		while (running) {
+			tickAll();
 			targetUpdateTime += deltaTime;
 			if (System.currentTimeMillis() < targetUpdateTime) {
-				try {
-					Thread.sleep((long) (targetUpdateTime - System.currentTimeMillis()));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Thread.sleep((long) (targetUpdateTime - System.currentTimeMillis()));
+				
 			}
 		}
+	}
+	
+	public void stop() {
+		running = false;
+	}
+	
+	public void tickAll() {
+		for (Tickable_S tickable : components) {
+			tickable.update(playerList);
+		}
+	}
+	
+	public static void registerTickable(Tickable_S tickable) {
+		components.add(tickable);
 	}
 	
 }
