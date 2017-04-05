@@ -1,30 +1,41 @@
 package dab.server.network;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
-public class SocketAcceptor {
+public class SocketAcceptor implements Runnable {
 	
-	private ServerSocket listener;
+	private SocketManager socketManager;
+	private boolean running;
 	
-	public void start(int port) throws IOException {
-		this.listener = new ServerSocket();
-		this.listener.setReuseAddress(true);
-		this.listener.bind(new InetSocketAddress(port));
+	public SocketAcceptor(SocketManager socketManager) {
+		this.socketManager = socketManager;
+		running = false;
 	}
 	
-	public Socket accept() throws IOException {
-		return listener.accept();
-	}
-	
-	public void stop() {
-		try {
-			listener.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+	@Override
+	public void run() {
+		System.out.println("Starting Socket Acceptor thread...");
+		running = true;
+		while (running) {
+			try {
+				Socket socket = socketManager.accept();
+				ClientConnection conn = new ClientConnection(socket);
+				conn.writeObject("server.request.name");
+				String message = (String) conn.readObject();
+				socketManager.addConnection(message, conn);
+			} catch (SocketException e) {
+				// probably from socket being closed server side
+				running = false;
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// continue to run but print error message
+				e.printStackTrace();
+			}
 		}
+		System.out.println("Stopping Socket Acceptor thread...");
 	}
 	
 }
