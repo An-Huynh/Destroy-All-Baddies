@@ -18,8 +18,10 @@ public class ClientUpdater implements Runnable {
 	}
 	
 	public void run() {
+		System.out.println("running updater");
 		while (!stop) {
 			try {
+				System.out.println("Calling Updater");
 				update();
 			} catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
@@ -30,25 +32,35 @@ public class ClientUpdater implements Runnable {
 	
 	private void update() throws ClassNotFoundException, IOException {
 		String controlMessage = (String) conn.readObject();
-		switch (controlMessage) {
-			case "server.init.player": initPlayer(); break;
+		System.out.println(controlMessage);
+		if (controlMessage.equals("server.request.name")) {
+			sendName();
+		} else if (controlMessage.equals("server.send.player")) {
+			readPlayer();
+		} else if (controlMessage.equals("server.send.check")) {
+			conn.writeObject("client.send.live");
 		}
 	}
 	
 	// Helper Methods
 	
-	private void initPlayer() throws ClassNotFoundException, IOException {
-		System.out.println("Sync - Start");
-		
+	private void sendName() throws IOException {
+		//conn.writeObject("finmitz");
+	}
+	
+	private void readPlayer() throws ClassNotFoundException, IOException {
+		System.out.println("Reading in player");
 		Player player = (Player) conn.readObject();
+		
+		System.out.println(player.getZone());
+		
 		gameState.getPlayer().copy(player);
-		System.out.println(player.getCenter().x + " " + player.getCenter().y);
-		System.out.println("Sync - finish");
 	}
 	
 	public void sync() throws IOException, ClassNotFoundException {
-		conn.writeObject("client.init.start");
-		conn.writeObject("Finmitz");
+		conn.writeObject("finmitz");
+		System.out.println("asking for player");
+		conn.writeObject("client.request.player");
 		update();
 	}
 	
