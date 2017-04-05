@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientConnection {
 	private Socket socket;
@@ -12,38 +13,44 @@ public class ClientConnection {
 	
 	public ClientConnection(Socket socket) throws IOException {
 		this.socket = socket;
-		this.out = new ObjectOutputStream(this.socket.getOutputStream());
-		this.in = new ObjectInputStream(this.socket.getInputStream());
+		this.out = new ObjectOutputStream(socket.getOutputStream());
+		setTimeout(10000);
+		this.in = new ObjectInputStream(socket.getInputStream());
 	}
 	
-	public Object readObject() {
-		synchronized(in) {
-			try {
-				return in.readObject();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-	}
-	
-	public void writeObject(Object obj) {
+	public void writeObject(Object obj) throws IOException {
 		synchronized(out) {
-			try {
-				out.writeObject(obj);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			out.writeObject(obj);
 		}
+	}
+	
+	public Object readObject() throws ClassNotFoundException, IOException {
+		synchronized(in) {
+			return in.readObject();
+		}
+	}
+	
+	public void setTimeout(int time) throws SocketException {
+		socket.setSoTimeout(time);
+	}
+	
+	public ObjectOutputStream getOut() {
+		return this.out;
+	}
+	
+	public ObjectInputStream getIn() {
+		return this.in;
 	}
 	
 	public void close() {
-		try {
-			in.close();
-			out.close();
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (socket != null) {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				socket = null;
+			}
 		}
 	}
 }
