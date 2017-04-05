@@ -6,31 +6,55 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import dab.server.network.Player_S;
-import dab.server.network.Player_S_Updater;
+import dab.common.entity.attribute.Direction;
+import dab.common.entity.player.Player;
+import dab.server.logic.PlayerUpdater;
+import dab.server.network.ClientConnection;
 
 public class PlayerList {
 	
-	private static final Map<Player_S, Player_S_Updater> playerList = new HashMap<Player_S, Player_S_Updater>();
-	private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+	private Map<String, Player> playerList;
+	private ThreadPoolExecutor executor;
 	
-	
-	public static void addPlayer(Player_S player) {
-		playerList.put(player, new Player_S_Updater(player));
-		executor.execute(playerList.get(player));
+	public PlayerList() {
+		playerList = new HashMap<String, Player>();
+		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
 	}
 	
-	public static void removePlayer(Player_S player) {
-		playerList.get(player).stop();
-		playerList.remove(player);
+	public void addPlayer(String name, ClientConnection conn) {
+		playerList.put(name, createPlayer(name));
+		executor.execute(new PlayerUpdater(getPlayer(name), conn));
 	}
 	
-	public static Iterator<Player_S> getKeyIterator() {
+	public void removePlayer(String playerName) {
+		System.out.println("removing " + playerName);
+		playerList.remove(playerName);
+	}
+	
+	public Iterator<String> getKeyIterator() {
 		return playerList.keySet().iterator();
 	}
 	
-	public static int getNumPlayers() {
-		return playerList.size();
+	public Player getPlayer(String key) {
+		return playerList.get(key);
+	}
+	
+	public void stop() {
+		executor.shutdownNow();
+	}
+	
+	// Helper methods
+	
+	private Player createPlayer(String name) {
+		System.out.println("creating player w/ name " + name);
+		Player player = new Player();
+		player.setName(name);
+		player.setDirection(Direction.NONE);
+		player.setHeight(1.0f);
+		player.setWidth(1.0f);
+		player.setLocation(3.0f, 3.0f);
+		player.setZone("dab:zone:maze");
+		return player;
 	}
 	
 }
