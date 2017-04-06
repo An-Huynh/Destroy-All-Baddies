@@ -31,7 +31,7 @@ public class PlayerDrawable implements VariableDrawable {
     protected Matrix4f translationMatrix;
     
     public PlayerDrawable(String fileLoc) throws IOException {
-        projectionMatrix = new Matrix4f().ortho(0, 640/40, 0, 480/40, 0, 10);
+        projectionMatrix = new Matrix4f().ortho(0, 640/20, 0, 480/20, 0, 10);
         translationMatrix = new Matrix4f();
         
         createProgram();
