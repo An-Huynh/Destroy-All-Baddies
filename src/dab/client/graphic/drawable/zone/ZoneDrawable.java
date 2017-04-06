@@ -19,6 +19,7 @@ import dab.client.graphic.shader.FragmentShader;
 import dab.client.graphic.shader.VertexShader;
 import dab.client.graphic.texture.Texture;
 
+
 public class ZoneDrawable implements Drawable {
 	protected Program program;
 	protected Texture texture;
@@ -43,31 +44,31 @@ public class ZoneDrawable implements Drawable {
 	}
 	
 	protected void createProgram() throws IOException {
-		System.out.println("<CLEAR HERE>");
+
 		String vSource = readSource("/resource/shader/zone.vs");
 		String fSource = readSource("/resource/shader/zone.fs");
-		System.out.println("<CLEAR HERE>");
+
 		VertexShader vs = new VertexShader();
-		System.out.println("<CLEAR HERE>");
+
 		vs.loadSource(vSource);
-		System.out.println("<CLEAR HERE>");
+
 		vs.compile();
-		System.out.println("<CLEAR HERE>");
+
 		
 		if (vs.compileResult() == false) {
 			System.out.println(vs.getLog());
 		}
 		
-		System.out.println("<CLEAR HERE>");
+
 		FragmentShader fs = new FragmentShader();
 		fs.loadSource(fSource);
 		fs.compile();
-		System.out.println("<CLEAR HERE>");
+
 		program = new Program();
 		program.attachShader(vs);
 		program.attachShader(fs);
 		program.link();
-		System.out.println("<CLEAR HERE>");
+
 		program.detachShader(vs);
 		program.detachShader(fs);
 		

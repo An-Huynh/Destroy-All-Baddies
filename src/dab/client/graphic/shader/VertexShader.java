@@ -11,10 +11,7 @@ public class VertexShader implements Shader {
 	 * Constructor for VertexShader
 	 */
 	public VertexShader() {
-		// create a empty shader object to use
-		System.out.println("<CLEAR HERE - VS>");
 		shaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		System.out.println("<CLEAR HERE - VS>");
 	}
 
 	/**
