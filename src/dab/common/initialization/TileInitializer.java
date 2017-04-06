@@ -1,17 +1,17 @@
 package dab.common.initialization;
 
 import dab.common.registry.TileRegistry;
-import dab.common.tile.Wall;
+import dab.common.tile.SolidBlock;
 
 public class TileInitializer {
 	
-	private static Wall wall;
+	private static SolidBlock solidBlock;
 	
 	public static void preInit() {
-		wall = new Wall();
+		solidBlock = new SolidBlock();
 	}
 	
 	public static void init() {
-		TileRegistry.register(wall);
+		TileRegistry.register(solidBlock);
 	}
 }

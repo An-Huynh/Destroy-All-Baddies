@@ -43,7 +43,7 @@ public abstract class Zone {
 	}
 	
 	protected void addTile(Tile tile, int x, int y) {
-		this.layout.put(tile.getName(), tile);
+		this.layout.put(convertToKey(x, y), tile);
 	}
 	
 	// etc

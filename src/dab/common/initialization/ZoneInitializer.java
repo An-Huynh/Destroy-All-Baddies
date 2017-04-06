@@ -1,18 +1,18 @@
 package dab.common.initialization;
 
 import dab.common.registry.ZoneRegistry;
-import dab.common.zone.Maze;
+import dab.common.zone.StartZone;
 
 public class ZoneInitializer {
 	
-	private static Maze maze;
+    private static StartZone startZone;
 	
-	public static void preInit() {
-		maze = new Maze();
-	}
+    public static void preInit() {
+        startZone = new StartZone();
+    }
 	
-	public static void init() {
-		maze.setup();
-		ZoneRegistry.register(maze);
-	}
+    public static void init() {
+        startZone.setup();
+        ZoneRegistry.register(startZone);
+    }
 }

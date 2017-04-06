@@ -8,6 +8,7 @@ public abstract class Tile {
 	
 	private String name;
 	private AABB boundingBox; // values set to local to itself (0, 0) bottom left to (1, 1) top right
+	private boolean solid;
 	
 	// Constructor
 	
@@ -18,11 +19,15 @@ public abstract class Tile {
 	// Accessors
 	
 	public AABB getAABB() {
-		return this.getAABB();
+		return this.boundingBox;
 	}
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public boolean isSolid() {
+	    return this.solid;
 	}
 	
 	// Mutators
@@ -45,5 +50,9 @@ public abstract class Tile {
 	
 	protected void setName(String name) {
 		this.name = name;
+	}
+	
+	protected void setSolid(boolean value) {
+	    this.solid = value;
 	}
 }
