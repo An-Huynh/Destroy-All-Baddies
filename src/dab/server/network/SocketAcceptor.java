@@ -22,9 +22,16 @@ public class SocketAcceptor implements Runnable {
 			try {
 				Socket socket = socketManager.accept();
 				ClientConnection conn = new ClientConnection(socket);
-				conn.writeObject("server.request.name");
+				conn.writeObject("request.name");
+				conn.readObject();
 				String message = (String) conn.readObject();
-				socketManager.addConnection(message, conn);
+				if (socketManager.getConnection(message) != null) {
+				    conn.writeObject("update.error");
+				    conn.writeObject("Player already has your name");
+				    conn.close();
+				} else {
+				    socketManager.addConnection(message, conn);
+				}
 			} catch (SocketException e) {
 				// probably from socket being closed server side
 				running = false;

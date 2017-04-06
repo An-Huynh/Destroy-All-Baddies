@@ -40,6 +40,14 @@ public class SocketManager {
 					socketLifeChecker.stop();
 				}
 				listener.close();
+				
+				Iterator<String> key = getKeyIterator();
+				while (key.hasNext()) {
+				    String connectionKey = key.next();
+				    connections.get(connectionKey).close();
+				    connections.remove(connectionKey);
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {

@@ -23,7 +23,7 @@ public class PlayerList {
 	
 	public void addPlayer(String name, ClientConnection conn) {
 		playerList.put(name, createPlayer(name));
-		executor.execute(new PlayerUpdater(getPlayer(name), conn));
+		executor.execute(new PlayerUpdater(getPlayer(name), conn, this));
 	}
 	
 	public void removePlayer(String playerName) {
@@ -43,6 +43,10 @@ public class PlayerList {
 		executor.shutdownNow();
 	}
 	
+	public Map<String, Player> getPlayerList() {
+	    return playerList;
+	}
+	
 	// Helper methods
 	
 	private Player createPlayer(String name) {
@@ -52,8 +56,8 @@ public class PlayerList {
 		player.setDirection(Direction.NONE);
 		player.setHeight(1.0f);
 		player.setWidth(1.0f);
-		player.setLocation(3.0f, 3.0f);
-		player.setZone("dab:zone:maze");
+		player.setLocation(1.5f, 1.5f);
+		player.setZone("dab:zone:start");
 		return player;
 	}
 	

@@ -12,24 +12,27 @@ import dab.server.players.PlayerList;
 
 public class GameServer implements Runnable {
 
+    
 	private SocketManager socketManager;
 	private GameLoop gameLoop;
 	private PlayerList playerList;
 	private int port;
 	
+	boolean running;
+	
 	public GameServer(int port) {
+	    running = false;
 		this.port = port;
-		
 		playerList = new PlayerList();
 		socketManager = new SocketManager(playerList);
-		gameLoop = new GameLoop(playerList);
+		gameLoop = new GameLoop();
 	}
 	
 	public void preInit() {
 		
 		TileInitializer.preInit();
 		ZoneInitializer.preInit();
-		LoopComponentInitializer.preInit();
+		LoopComponentInitializer.preInit(socketManager, playerList);
 	}
 	
 	public void init() {
@@ -40,24 +43,50 @@ public class GameServer implements Runnable {
 	
 	public void postInit() throws IOException, InterruptedException {
 		socketManager.start(port);
-		gameLoop.run();
 	}
 	
 	@Override
 	public void run() {
-		preInit();
-		init();
-		try {
-			postInit();
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
+	    running = true;
+	    try {
+	        preInit();
+	        init();
+	        postInit();
+	    } catch (IOException | InterruptedException e) {
+	        e.printStackTrace();
+	        running = false;
+	    }
+	    
+	    final double tickRate = 60.0;
+	    final double deltaTime = 1000/tickRate;
+	    double targetUpdateTime = System.currentTimeMillis();
+	    while (running) {
+	        try {
+                gameLoop.tickAll();
+            } catch (IOException e) {
+                e.printStackTrace();
+                running = false;
+            }
+	        targetUpdateTime += deltaTime;
+            double now = System.currentTimeMillis();
+            if (now < targetUpdateTime) {
+                try {
+                    Thread.sleep((long) (targetUpdateTime - now));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    running = false;
+                }
+            }
+	    }
+
+	    System.out.println("stopping");
+	    playerList.stop();
+	    socketManager.stop();
+	    
 	}
 	
 	public void stop() {
-		gameLoop.stop();
-		playerList.stop();
-		socketManager.stop();
+		running = false;
 	}
 	
 	public static void main(String[] args) {
@@ -70,7 +99,5 @@ public class GameServer implements Runnable {
 		in.close();
 		gs.stop();
 	}
-	
-	
-	
+
 }

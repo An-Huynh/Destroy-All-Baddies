@@ -1,7 +1,7 @@
 package dab.server.logic.component;
 
-import dab.server.players.PlayerList;
+import java.io.IOException;
 
 public interface Tickable_S {
-	public void update(PlayerList playerList);
+	public void update() throws IOException;
 }
