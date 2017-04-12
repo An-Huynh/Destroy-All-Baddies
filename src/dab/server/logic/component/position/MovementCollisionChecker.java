@@ -12,6 +12,7 @@ import dab.common.physics.AABB;
 import dab.common.registry.ZoneRegistry;
 import dab.common.tile.Tile;
 import dab.common.zone.Zone;
+import dab.common.logic.Collision;
 
 public class MovementCollisionChecker {
 
@@ -111,7 +112,7 @@ public class MovementCollisionChecker {
 	}
 	
 	private static boolean checkAABBCollision(AABB a1, AABB a2) {
-		return a1.testCollision(a2);
+		return Collision.testCollision(a1, a2);
 	}
 	
 	private static Zone getPlayerZone(Player player) {
