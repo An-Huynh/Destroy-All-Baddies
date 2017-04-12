@@ -45,29 +45,29 @@ public class DirectionListener implements K_Observer {
     
     private ArrayList<Direction> getDirectionsPressed() {
     	ArrayList<Direction> directionsPressed = new ArrayList<Direction>();
-    	if (isKeyDown(GLFW.GLFW_KEY_LEFT)) {
+    	if (isKeyDown(GLFW.GLFW_KEY_LEFT) || isKeyDown(GLFW.GLFW_KEY_A)) {
     		directionsPressed.add(Direction.LEFT);
     	}
-    	if (isKeyDown(GLFW.GLFW_KEY_UP)) {
+    	if (isKeyDown(GLFW.GLFW_KEY_UP) || isKeyDown(GLFW.GLFW_KEY_W)) {
     		directionsPressed.add(Direction.UP);
     	}
-    	if (isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
+    	if (isKeyDown(GLFW.GLFW_KEY_RIGHT) || isKeyDown(GLFW.GLFW_KEY_D)) {
     		directionsPressed.add(Direction.RIGHT);
     	}
-    	if (isKeyDown(GLFW.GLFW_KEY_DOWN)) {
+    	if (isKeyDown(GLFW.GLFW_KEY_DOWN) || isKeyDown(GLFW.GLFW_KEY_S)) {
     		directionsPressed.add(Direction.DOWN);
     	}
     	return directionsPressed;
     }
     
     private boolean isDirectionKey(int key) {
-    	if (key == GLFW.GLFW_KEY_LEFT) {
+    	if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_A) {
     		return true;
-    	} else if (key == GLFW.GLFW_KEY_UP) {
+    	} else if (key == GLFW.GLFW_KEY_UP || key == GLFW.GLFW_KEY_W) {
     		return true;
-    	} else if (key == GLFW.GLFW_KEY_RIGHT) {
+    	} else if (key == GLFW.GLFW_KEY_RIGHT || key == GLFW.GLFW_KEY_D) {
     		return true;
-    	} else if (key == GLFW.GLFW_KEY_DOWN) {
+    	} else if (key == GLFW.GLFW_KEY_DOWN || key == GLFW.GLFW_KEY_S) {
     		return true;
     	}
     	return false;
