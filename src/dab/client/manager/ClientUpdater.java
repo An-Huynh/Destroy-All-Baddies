@@ -34,7 +34,8 @@ public class ClientUpdater implements Runnable {
     }
     
     private void handleMessage(String message) throws IOException, ClassNotFoundException {
-        if (message.equals("request.heartbeart")) {
+        if (message.equals("request.heartbeat")) {
+        	System.out.println("sending heatbeat");
             conn.write("update.heartbeat");
         } else if (message.equals("update.player.client")) {
             //Player player = (Player) conn.read();
@@ -42,6 +43,8 @@ public class ClientUpdater implements Runnable {
             clientManager.getPlayerList().setMainPlayer((Player) conn.read());
         } else if (message.equals("update.player.center")) {
         	handlePlayerLocationUpdate();
+        } else if (message.equals("update.player.removal")) {
+        	handlePlayerRemoval();
         }
     }
     
@@ -53,12 +56,36 @@ public class ClientUpdater implements Runnable {
 
     public void updatePlayerLocation(String playerName, Vector2f location) {
     	if (isMainPlayer(playerName)) {
+    		System.out.println("updating main player");
     		clientManager.getPlayerList().getMainPlayer().setLocation(location);
+    	} else {
+    		if (clientManager.getPlayerList().hasPlayer(playerName)) {
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setLocation(location);
+    		} else {
+    			clientManager.getPlayerList().addRemotePlayer(new Player(playerName));
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setLocation(location);
+    		}
     	}
     }
     
+    private void handlePlayerRemoval() {
+    	String playerName;
+		try {
+			playerName = (String) conn.read();
+			clientManager.getPlayerList().removeRemotePlayer(playerName);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
     public boolean isMainPlayer(String playerName) {
-    	return clientManager.getPlayerList().getMainPlayer().getName().equals(playerName);
+    	System.out.println(clientManager.getPlayerList().getMainPlayer().getName());
+    	System.out.println(playerName);
+    	if (clientManager.getPlayerList().getMainPlayer().getName().equals(playerName)) {
+    		System.out.println("equals");
+    		return true;
+    	}
+    	return false;
     }
     
     public void stop() {

@@ -18,11 +18,12 @@ public class Player extends Entity implements Serializable {
 	// Constructor
 	public Player() {
 		super();
+		setupModifiedAttributesContainer();
 	}
 	
 	public Player(String name) {
-		super();
-		
+		this();
+		setName(name);
 	}
 	
 	// Accessors

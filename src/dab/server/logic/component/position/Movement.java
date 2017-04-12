@@ -20,7 +20,9 @@ public class Movement implements Tickable_S {
 		Iterator<Player> players = getPlayerIterator();
 		while (players.hasNext()) {
 			Player player = players.next();
-			updatePlayerPosition(player);
+			if (MovementCollisionChecker.isPlayerMoving(player)) {
+				updatePlayerPosition(player);
+			}
 		}
 	}
 	

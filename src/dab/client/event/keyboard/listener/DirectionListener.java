@@ -20,14 +20,19 @@ public class DirectionListener implements K_Observer {
         if (key == getKey("up") || key == getKey("right") || key == getKey("down") || key == getKey("left")) {
             if (keyUp("up") && !keyUp("right") && !keyUp("down") && !keyUp("left")) {
                 clientManager.getPlayerList().getMainPlayer().setDirection(Direction.UP);
+                setDirectionModified();
             } else if (!keyUp("up") && keyUp("right") && !keyUp("down") && !keyUp("left")) {
                 clientManager.getPlayerList().getMainPlayer().setDirection(Direction.RIGHT);
+                setDirectionModified();
             } else if (!keyUp("up") && !keyUp("right") && keyUp("down") && !keyUp("left")) {
                 clientManager.getPlayerList().getMainPlayer().setDirection(Direction.DOWN);
+                setDirectionModified();
             } else if (!keyUp("up") && !keyUp("right") && !keyUp("down") && keyUp("left")) {
                 clientManager.getPlayerList().getMainPlayer().setDirection(Direction.LEFT);
+                setDirectionModified();
             } else {
                 clientManager.getPlayerList().getMainPlayer().setDirection(Direction.NONE);
+                setDirectionModified();
             }
         }
     }
@@ -48,6 +53,10 @@ public class DirectionListener implements K_Observer {
     
     public boolean keyUp(String key) {
         return KeyCallback.isKeyDown(getKey(key));
+    }
+    
+    public void setDirectionModified() {
+    	clientManager.getPlayerList().getMainPlayer().setIsDirectionModified(true);
     }
     
 }

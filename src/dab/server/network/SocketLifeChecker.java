@@ -28,11 +28,12 @@ public class SocketLifeChecker implements Runnable {
 					public void run() {
 						ClientConnection conn = socketManager.getConnection(key);
 						try {
-							conn.writeObject("server.send.check");
-							//conn.setTimeout(3000);
+							conn.setTimeout(20000);
+							conn.writeObject("request.heartbeat");
 						} catch (IOException e) {
 							//e.printStackTrace();
 							socketManager.removeConnection(key);
+							running = false;
 						}
 					}
 				});

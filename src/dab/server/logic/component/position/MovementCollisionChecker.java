@@ -32,7 +32,7 @@ public class MovementCollisionChecker {
 	
 	public static boolean checkFuturePlayerZoneSolidCollision(Player player) {
 		AABB possibleAABB = calculateNextPlayerAABB(player);
-		Player tempPlayer =  getPlayerCopy(player);
+		Player tempPlayer = getPlayerCopy(player);
 		setPlayerAABB(tempPlayer, possibleAABB);
 		return checkPlayerZoneSolidCollision(tempPlayer);
 	}
@@ -42,6 +42,10 @@ public class MovementCollisionChecker {
 		Player tempPlayer =  getPlayerCopy(player);
 		setPlayerAABB(tempPlayer, possibleAABB);
 		return checkPlayerZoneCollisionIgnoreSolid(tempPlayer);
+	}
+	
+	public static boolean isPlayerMoving(Player player) {
+		return player.getDirection() != Direction.NONE;
 	}
 	
 	private static AABB updateAABBByDirection(AABB boundingBox, Direction direction) {

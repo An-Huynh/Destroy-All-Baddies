@@ -99,6 +99,19 @@ public class SocketManager {
 		System.out.println(name + " : connection removed");
 		connections.remove(name);
 		playerList.removePlayer(name);
+		
+		Iterator<ClientConnection> conns = connections.values().iterator();
+		while (conns.hasNext()) {
+			ClientConnection conn = conns.next();
+			synchronized(conn.getOut()) {
+				try {
+					conn.writeObject("update.player.removal");
+					conn.writeObject(name);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public Iterator<String> getKeyIterator() {

@@ -20,7 +20,7 @@ public class PlayerList {
     }
     
     public Player getRemotePlayer(String playerName) {
-        return remotePlayers.get(playerName);
+    	return remotePlayers.get(playerName);
     }
     
     public void setMainPlayer(Player player) {
@@ -29,6 +29,14 @@ public class PlayerList {
     
     public void addRemotePlayer(Player player) {
         remotePlayers.put(player.getName(), player);
+    }
+    
+    public void removeRemotePlayer(String playerName) {
+    	remotePlayers.remove(playerName);
+    }
+    
+    public boolean hasPlayer(String playerName) {
+    	return remotePlayers.containsKey(playerName);
     }
     
     public Map<String, Player> getRemoteList() {

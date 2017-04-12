@@ -41,6 +41,7 @@ public class PlayerUpdater implements Runnable {
 	        conn.writeObject("update.player.client");
 	        conn.writeObject(player);
 	    } else if (message.equals("update.direction")) {
+	    	System.out.println("reading direction update");
 	        Direction direction = (Direction) conn.readObject();
 	        player.setDirection(direction);
 	    }
