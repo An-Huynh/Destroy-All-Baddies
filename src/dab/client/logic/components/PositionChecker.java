@@ -19,7 +19,6 @@ public class PositionChecker implements Tickable {
     @Override
     public void update() throws IOException {
     	if (player.isDirectionModified()) {
-    		System.out.println("writing direction");
     		conn.write("update.direction");
     		conn.write(player.getDirection());
     		player.setIsDirectionModified(false);
