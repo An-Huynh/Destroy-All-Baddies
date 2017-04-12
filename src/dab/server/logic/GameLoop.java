@@ -11,7 +11,7 @@ public class GameLoop {
 	
 	public void tickAll() throws IOException {
 	    for (Tickable_S tickable : components) {
-	        tickable.update();
+	        tickable.invoke();
 	    }
 	}
 	

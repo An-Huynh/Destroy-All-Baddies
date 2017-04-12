@@ -43,6 +43,14 @@ public class Player extends Entity implements Serializable {
 		return this.getCenter();
 	}
 	
+	public boolean isDirectionModified() {
+		return isAttributeModified("direction");
+	}
+	
+	public boolean isZoneModified() {
+		return isAttributeModified("zone");
+	}
+	
 	// Mutators
 	
 	public void setName(String name) {
@@ -73,12 +81,25 @@ public class Player extends Entity implements Serializable {
 		this.getAABB().setWidth(width);
 	}
 	
+	public void setIsZoneModified(boolean isModified) {
+		setAttributeModifiedValue("zone", isModified);
+	}
+	
+	public void setIsDirectionModified(boolean isModified) {
+		setAttributeModifiedValue("direction", isModified);
+	}
+	
 	//etc
 	public void copy(Player player) {
 		this.playerName = player.playerName;
 		this.currentZone = player.currentZone;
 		this.direction = player.direction;
 		this.getAABB().copy(player.getAABB());
+	}
+	
+	public void setupModifiedAttributesContainer() {
+		addAttributeModifiable("zone");
+		addAttributeModifiable("direction");
 	}
 	
 }

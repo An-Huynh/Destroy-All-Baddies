@@ -57,13 +57,12 @@ public class MovementCollisionChecker {
 		Vector2f offset = new Vector2f();
 		switch (direction) {
 			case LEFT:
-				System.out.println("left");
-				offset.set(-0.1f, 0.0f); break;
+				offset.set(-0.1f, 0.0f);
+				break;
 			case RIGHT:
-				System.out.println("right");
-				offset.set(0.1f, 0.0f); break;
+				offset.set(0.1f, 0.0f);
+				break;
 			default:
-				System.out.println("default");
 				offset.set(0.0f, 0.0f);
 		}
 		return offset;

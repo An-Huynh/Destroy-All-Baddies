@@ -28,14 +28,13 @@ public class ServerConnection {
     
     public void write(Object obj) throws IOException {
         synchronized(out) {
-        	out.reset();
-            out.writeObject(obj);
+            out.writeUnshared(obj);
         }
     }
     
     public Object read() throws ClassNotFoundException, IOException {
         synchronized(in) {
-            return in.readObject();
+            return in.readUnshared();
         }
     }
     

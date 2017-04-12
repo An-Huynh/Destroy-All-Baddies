@@ -1,8 +1,8 @@
 package dab.client.manager;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+
+import org.joml.Vector2f;
 
 import dab.client.network.ServerConnection;
 import dab.common.entity.player.Player;
@@ -40,31 +40,27 @@ public class ClientUpdater implements Runnable {
             //Player player = (Player) conn.read();
             //clientManager.getPlayerList().getMainPlayer().copy(player);
             clientManager.getPlayerList().setMainPlayer((Player) conn.read());
-        } else if (message.equals("update.playerlist")) {
-            Map<String, Player> playerList = (Map<String, Player>) conn.read();
-            String mainPlayer = clientManager.getPlayerList().getMainPlayer().getName();
-            clientManager.getPlayerList().getMainPlayer().copy(playerList.get(mainPlayer));
-            
-            Map<String, Player> remotePlayerList = clientManager.getPlayerList().getRemoteList();
-            // remove names not on the list
-            Iterator<String> iter = remotePlayerList.keySet().iterator();
-            while (iter.hasNext()) {
-                String key = iter.next();
-                if (!playerList.containsKey(key)) {
-                    remotePlayerList.remove(key);
-                }
-            }
-            
-           iter = playerList.keySet().iterator();
-           while (iter.hasNext()) {
-               String key = iter.next();
-               if (!key.equals(mainPlayer)) {
-                   remotePlayerList.put(key, playerList.get(key));
-               }
-           }
+        } else if (message.equals("update.player.center")) {
+        	handlePlayerLocationUpdate();
         }
     }
+    
+    public void handlePlayerLocationUpdate() throws ClassNotFoundException, IOException {
+    	String playerName = (String) conn.read();
+    	Vector2f location = (Vector2f) conn.read();
+    	updatePlayerLocation(playerName, location);
+    }
 
+    public void updatePlayerLocation(String playerName, Vector2f location) {
+    	if (isMainPlayer(playerName)) {
+    		clientManager.getPlayerList().getMainPlayer().setLocation(location);
+    	}
+    }
+    
+    public boolean isMainPlayer(String playerName) {
+    	return clientManager.getPlayerList().getMainPlayer().getName().equals(playerName);
+    }
+    
     public void stop() {
         running = false;
     }

@@ -35,6 +35,10 @@ public class PlayerList {
 		return playerList.keySet().iterator();
 	}
 	
+	public Iterator<Player> getPlayerIterator() {
+		return playerList.values().iterator();
+	}
+	
 	public Player getPlayer(String key) {
 		return playerList.get(key);
 	}

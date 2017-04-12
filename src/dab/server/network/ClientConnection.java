@@ -20,13 +20,13 @@ public class ClientConnection {
 	
 	public void writeObject(Object obj) throws IOException {
 		synchronized(out) {
-			out.writeObject(obj);
+			out.writeUnshared(obj);
 		}
 	}
 	
 	public Object readObject() throws ClassNotFoundException, IOException {
 		synchronized(in) {
-			return in.readObject();
+			return in.readUnshared();
 		}
 	}
 	
