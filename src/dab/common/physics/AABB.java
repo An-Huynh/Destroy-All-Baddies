@@ -55,14 +55,6 @@ public class AABB implements Serializable {
 	
 	// etc
 	
-	public boolean testCollision(AABB aabb) {
-		if (Math.abs(this.center.x - aabb.center.x) > (this.width/2 + aabb.width/2) ||
-				Math.abs(this.center.y - aabb.center.y) > (this.height/2 + aabb.height/2)) {
-			return false;
-		}
-		return true;
-	}
-	
 	public AABB copy(AABB aabb) {
 		this.width = aabb.width;
 		this.height = aabb.height;
