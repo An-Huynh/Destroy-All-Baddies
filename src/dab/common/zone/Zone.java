@@ -36,6 +36,13 @@ public abstract class Zone {
 		return null;
 	}
 	
+	public boolean hasTileAtLocation(int x, int y) {
+		if (getTile(x, y) != null) {
+			return false;
+		}
+		return true;
+	}
+	
 	// Mutators
 	
 	protected void setName(String name) {
