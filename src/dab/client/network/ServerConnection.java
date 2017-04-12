@@ -28,6 +28,7 @@ public class ServerConnection {
     
     public void write(Object obj) throws IOException {
         synchronized(out) {
+        	out.reset();
             out.writeObject(obj);
         }
     }

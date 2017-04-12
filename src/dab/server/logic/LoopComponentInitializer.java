@@ -1,6 +1,6 @@
 package dab.server.logic;
 
-import dab.server.logic.component.Movement;
+import dab.server.logic.component.position.Movement;
 import dab.server.network.SocketManager;
 import dab.server.players.PlayerList;
 
