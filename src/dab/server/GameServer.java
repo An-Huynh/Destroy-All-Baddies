@@ -80,9 +80,12 @@ public class GameServer implements Runnable {
 	    }
 
 	    System.out.println("stopping");
-	    playerList.stop();
-	    socketManager.stop();
 	    
+	    try {
+			socketManager.stop();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void stop() {

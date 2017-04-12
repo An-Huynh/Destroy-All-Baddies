@@ -1,7 +1,5 @@
 package dab.server.logic.component.position;
 
-import java.util.Iterator;
-
 import dab.common.entity.player.Player;
 import dab.common.physics.AABB;
 import dab.server.logic.component.Tickable_S;
@@ -17,17 +15,11 @@ public class Movement implements Tickable_S {
 	
 	@Override
 	public void invoke() {
-		Iterator<Player> players = getPlayerIterator();
-		while (players.hasNext()) {
-			Player player = players.next();
+		for (Player player : playerList.getPlayers()) {
 			if (MovementCollisionChecker.isPlayerMoving(player)) {
 				updatePlayerPosition(player);
 			}
 		}
-	}
-	
-	private Iterator<Player> getPlayerIterator() {
-		return playerList.getPlayerList().values().iterator();
 	}
 	
 	private void updatePlayerPosition(Player player) {
