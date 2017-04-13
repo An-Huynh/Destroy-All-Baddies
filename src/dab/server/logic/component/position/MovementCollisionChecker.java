@@ -54,6 +54,12 @@ public class MovementCollisionChecker {
 		return player.getDirection() != Direction.NONE;
 	}
 	
+
+	public static ArrayList<Tile> getTilesCollidingWithPlayerIgnoreSolid(Player player) {
+		ArrayList<Vector2i> possibleCollisionTileLocations = getPossiblePlayerCollisionArea(player);
+		return getEachCollidingTile(player, possibleCollisionTileLocations);
+  }
+
 	public static boolean checkFuturePlayerGravityCollision(Player player) {
 		AABB possibleAABB = calculateNextPlayerGravityAABB(player);
 		Player tempPlayer = getPlayerCopy(player);
@@ -172,6 +178,16 @@ public class MovementCollisionChecker {
 	private static Player setPlayerAABB(Player player, AABB aabb) {
 		player.getAABB().copy(aabb);
 		return player;
+	}
+	
+	private static ArrayList<Tile> getEachCollidingTile(Player player, ArrayList<Vector2i> tileLocations) {
+		ArrayList<Tile> collidingTiles = new ArrayList<Tile>();
+		for (Vector2i tileLocation : tileLocations) {
+			if (checkCollisionPlayerTileLocationIgnoreSolid(player, tileLocation)) {
+				collidingTiles.add(getTileAtPlayerZone(getPlayerZone(player), tileLocation));
+			}
+		}
+		return collidingTiles;
 	}
 	
 }
