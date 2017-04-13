@@ -12,8 +12,8 @@ public class ConnectionManager {
     private ServerConnection conn;
     private ClientManager clientManager;
     
-    public ConnectionManager(ClientManager cm) {
-        clientManager = cm;
+    public ConnectionManager(ClientManager clientManager) {
+        this.clientManager = clientManager;
     }
     
     public void start(String host, int port) throws UnknownHostException, IOException {
@@ -29,24 +29,17 @@ public class ConnectionManager {
     }
     
     public void sync(String name) throws ClassNotFoundException, IOException {
-        conn.write("update.name");
-        conn.write(name);
-        boolean playerSynced = false;
-        conn.write("request.player.client");
-        while (!playerSynced) {
-            String controlMessage = (String) conn.read();
-            if (controlMessage.equals("request.heartbeat")) {
-                conn.write("heartbeat");
-            } else if (controlMessage.equals("update.player.client")) {
-                clientManager.getPlayerList().setMainPlayer((Player) conn.read());
-                playerSynced = true;
-            } else if (controlMessage.equals("request.name")) {
-                // do nothing.already sent name
-            } else if (controlMessage.equals("update.error")) {
-                System.out.println((String) conn.read());
-                throw new IOException();
-            }
-        }
+    	String controlMessage = (String) conn.read();
+    	while (!controlMessage.equals("update.sync.complete")) {
+    		if (controlMessage.equals("request.name")) {
+    			System.out.println(name);
+    			conn.write("update." + name);
+    		}
+    		controlMessage = (String) conn.read();
+    	}
+    	conn.write("request.player.client");
+    	conn.read();
+    	clientManager.getPlayerList().getMainPlayer().copy((Player) conn.read()); 
     }
     
     public ClientManager getClientManager() {
