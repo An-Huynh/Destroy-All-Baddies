@@ -4,18 +4,21 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import dab.common.entity.player.Player;
+import dab.server.logic.PlayerUpdater;
 import dab.server.players.PlayerList;
 
 public class SocketManager {
 
 	private Map<String, ClientConnection> connections;
-	
 	private PlayerList playerList;
+	private ThreadPoolExecutor executor;
 	
 	private ServerSocket listener;
 	
@@ -23,8 +26,9 @@ public class SocketManager {
 	private SocketLifeChecker socketLifeChecker;
 	
 	public SocketManager(PlayerList playerList) {
-		connections = new HashMap<String, ClientConnection>();
 		this.playerList = playerList;
+		connections = new TreeMap<String, ClientConnection>();
+		executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 	}
 	
 	public void start(int port) throws IOException {
@@ -33,27 +37,11 @@ public class SocketManager {
 		startSocketChecker();
 	}
 	
-	public void stop() {
-		if (listener != null) {
-			try {
-				if (socketLifeChecker != null) {
-					socketLifeChecker.stop();
-				}
-				listener.close();
-				
-				Iterator<String> key = getKeyIterator();
-				while (key.hasNext()) {
-				    String connectionKey = key.next();
-				    connections.get(connectionKey).close();
-				    connections.remove(connectionKey);
-				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				listener = null;
-			}
-		}
+	public void stop() throws IOException {
+		listener.close();
+		socketAcceptor.stop();
+		socketLifeChecker.stop();
+		executor.shutdownNow();
 	}
 	
 	private void startListener(int port) throws IOException {
@@ -74,109 +62,45 @@ public class SocketManager {
 		socketCheckerThread.start();
 	}
 	
-	
-	// Other
-	public Socket accept() throws IOException {
+	public Socket acceptConnection() throws IOException {
 		return listener.accept();
 	}
 	
-	public void addConnection(String name, ClientConnection conn) throws IOException {
-		System.out.println(name + " : connection added");
-		if (connections.size() < 4) {
-			connections.put(name, conn);
-			playerList.addPlayer(name, conn);
-		} else {
-			try {
-				conn.writeObject("server.room.full");
-			} catch (IOException e) {
-				conn.close();
-				throw e;
-			}
+	public void setupNewConnection(String playerName, ClientConnection conn) {
+		connections.put(playerName, conn);
+		playerList.addPlayer(playerName);
+		startPlayerUpdater(playerList.getPlayer(playerName));
+	}
+	
+	public void removeConnection(String playerName) throws IOException {
+		playerList.removePlayer(playerName);
+		ClientConnection conn = getConnection(playerName);
+		connections.remove(playerName);
+		conn.close();
+		writeToAll("update.player.removal");
+		writeToAll(playerName);
+	}
+	
+	public ClientConnection getConnection(String playerName) {
+		return connections.get(playerName);
+	}
+	
+	private void startPlayerUpdater(Player player) {
+		executor.execute(new PlayerUpdater(player, getConnection(player.getName())));
+	}
+	
+	public void writeToAll(Object obj) throws IOException {
+		for (ClientConnection conn : connections.values()) {
+			conn.writeObject(obj);
 		}
 	}
 	
-	public void removeConnection(String name) {
-		System.out.println(name + " : connection removed");
-		connections.remove(name);
-		playerList.removePlayer(name);
-		
-		Iterator<ClientConnection> conns = connections.values().iterator();
-		while (conns.hasNext()) {
-			ClientConnection conn = conns.next();
-			synchronized(conn.getOut()) {
-				try {
-					conn.writeObject("update.player.removal");
-					conn.writeObject(name);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+	public Collection<String> getKeys() {
+		return connections.keySet();
 	}
 	
-	public Iterator<String> getKeyIterator() {
-		return connections.keySet().iterator();
-	}
-	
-	public ClientConnection getConnection(String key) {
-		return connections.get(key);
-	}
-	
-	public void writeMessage(String name, Object obj) {
-		ClientConnection conn = getConnection(name);
-		if (conn != null) {
-			synchronized(conn.getOut()) {
-				try {
-					conn.writeObject(obj);
-				} catch (IOException e) {
-					// do nothing. continue to run and let socketlifechecker handle
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public Object readMessage(String name) {
-		ClientConnection conn = getConnection(name);
-		if (conn != null) {
-			synchronized(conn.getIn()) {
-				try {
-					return conn.readObject();
-				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
-	}
-	
-	public static void main(String[] args) throws InterruptedException {
-		
-		PlayerList playerList = new PlayerList();
-		
-		
-		SocketManager sm = new SocketManager(playerList);
-		try {
-			sm.start(7720);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		Scanner in = new Scanner(System.in);
-		while (!in.nextLine().equals("/stop")) {}
-		sm.stop();
-		in.close();
-		System.out.println("Shutting Down...");
-		Thread.sleep(15000);
-		
-		ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
-	      int noThreads = currentGroup.activeCount();
-	      Thread[] lstThreads = new Thread[noThreads];
-	      currentGroup.enumerate(lstThreads);
-	      
-	      for (int i = 0; i < noThreads; i++) System.out.println("Thread No:" + i + " = " + lstThreads[i].getName());
-		
-		
+	public Collection<ClientConnection> keyConnections() {
+		return connections.values();
 	}
 	
 }

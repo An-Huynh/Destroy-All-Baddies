@@ -14,7 +14,7 @@ public class ClientConnection {
 	public ClientConnection(Socket socket) throws IOException {
 		this.socket = socket;
 		this.out = new ObjectOutputStream(socket.getOutputStream());
-		setTimeout(10000);
+		setTimeout(10000); // throw IOException if no communication from client
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}
 	
