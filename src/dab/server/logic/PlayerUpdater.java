@@ -78,6 +78,9 @@ public class PlayerUpdater implements Runnable {
 		if (message.equals("direction")) {
 			player.setDirection((Direction) conn.readObject());
 		}
+		if (message.equals("zone")) {
+			player.setZone((String) conn.readObject());
+		}
 	}
 	
 }
