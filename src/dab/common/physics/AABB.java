@@ -50,6 +50,7 @@ public class AABB implements Serializable {
 	}
 	
 	public AABB setHeight(float height) {
+		this.height = height;
 		return this;
 	}
 	

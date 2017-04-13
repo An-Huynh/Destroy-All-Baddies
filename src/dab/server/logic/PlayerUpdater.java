@@ -5,17 +5,14 @@ import java.io.IOException;
 import dab.common.entity.attribute.Direction;
 import dab.common.entity.player.Player;
 import dab.server.network.ClientConnection;
-import dab.server.players.PlayerList;
 
 public class PlayerUpdater implements Runnable {
 	
 	private Player player;
-	private PlayerList playerList;
 	private ClientConnection conn;
 	
-	public PlayerUpdater(Player player, ClientConnection conn, PlayerList playerList) {
+	public PlayerUpdater(Player player, ClientConnection conn) {
 		this.player = player;
-		this.playerList = playerList;
 		this.conn = conn;
 	}
 	

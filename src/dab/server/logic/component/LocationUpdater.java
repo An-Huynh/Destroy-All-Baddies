@@ -1,7 +1,6 @@
 package dab.server.logic.component;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import dab.common.entity.player.Player;
 import dab.server.network.ClientConnection;
@@ -20,9 +19,7 @@ public class LocationUpdater implements Tickable_S {
 	
 	@Override
 	public void invoke() throws IOException {
-		Iterator<Player> players = playerList.getPlayerIterator();
-		while (players.hasNext()) {
-			Player player = players.next();
+		for (Player player : playerList.getPlayers()) {
 			if (player.isCenterModified()) {
 				sendClientPositionToAll(player);
 				player.setIsCenterModified(false);
@@ -31,10 +28,8 @@ public class LocationUpdater implements Tickable_S {
 	}
 	
 	private void sendClientPositionToAll(Player sourcePlayer) {
-		Iterator<Player> players = playerList.getPlayerIterator();
-		while (players.hasNext()) {
-			Player remotePlayer = players.next();
-			sendPositionToPlayer(remotePlayer.getName(), sourcePlayer);
+		for (Player player : playerList.getPlayers()) {
+			sendPositionToPlayer(player.getName(), sourcePlayer);
 		}
 	}
 	

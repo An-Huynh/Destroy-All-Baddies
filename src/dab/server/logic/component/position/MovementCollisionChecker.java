@@ -21,6 +21,11 @@ public class MovementCollisionChecker {
 		return updateAABBByDirection(boundingBox, player.getDirection());
 	}
 	
+	public static AABB calculateNextPlayerGravityAABB(Player player) {
+		AABB boundingBox = new AABB().copy(player.getAABB());
+		return updateAABBByDirection(boundingBox, Direction.DOWN);
+	}
+	
 	public static boolean checkPlayerZoneSolidCollision(Player player) {
 		Zone playerZone = getPlayerZone(player);
 		return checkPlayerCollisionSolidZoneTiles(player, playerZone);
@@ -49,9 +54,17 @@ public class MovementCollisionChecker {
 		return player.getDirection() != Direction.NONE;
 	}
 	
+
 	public static ArrayList<Tile> getTilesCollidingWithPlayerIgnoreSolid(Player player) {
 		ArrayList<Vector2i> possibleCollisionTileLocations = getPossiblePlayerCollisionArea(player);
 		return getEachCollidingTile(player, possibleCollisionTileLocations);
+  }
+
+	public static boolean checkFuturePlayerGravityCollision(Player player) {
+		AABB possibleAABB = calculateNextPlayerGravityAABB(player);
+		Player tempPlayer = getPlayerCopy(player);
+		setPlayerAABB(tempPlayer, possibleAABB);
+		return checkPlayerZoneSolidCollision(tempPlayer);
 	}
 	
 	private static AABB updateAABBByDirection(AABB boundingBox, Direction direction) {
@@ -71,6 +84,9 @@ public class MovementCollisionChecker {
 				break;
 			case RIGHT:
 				offset.set(0.1f, 0.0f);
+				break;
+			case DOWN:
+				offset.set(0.0f, -0.1f);
 				break;
 			default:
 				offset.set(0.0f, 0.0f);

@@ -1,7 +1,9 @@
 package dab.client.players;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import dab.common.entity.player.Player;
 
@@ -12,7 +14,7 @@ public class PlayerList {
     
     public PlayerList() {
         mainPlayer = new Player();
-        remotePlayers = new HashMap<String, Player>();
+        remotePlayers = new TreeMap<String, Player>();
     }
     
     public Player getMainPlayer() {
@@ -27,6 +29,10 @@ public class PlayerList {
         mainPlayer.copy(player);
     }
     
+    public void setRemotePlayer(String playerName, Player player) {
+    	getRemotePlayer(playerName).copy(player);
+    }
+    
     public void addRemotePlayer(Player player) {
         remotePlayers.put(player.getName(), player);
     }
@@ -39,8 +45,20 @@ public class PlayerList {
     	return remotePlayers.containsKey(playerName);
     }
     
-    public Map<String, Player> getRemoteList() {
-        return remotePlayers;
+    public Collection<String> getRemotePlayerNames() {
+    	return remotePlayers.keySet();
+    }
+    
+    public Collection<Player> getRemotePlayers() {
+    	return remotePlayers.values();
+    }
+    
+    public Iterator<String> getIteratorRemotePlayersName() {
+    	return remotePlayers.keySet().iterator();
+    }
+    
+    public Iterator<Player> getIteratorRemotePlayers() {
+    	return remotePlayers.values().iterator();
     }
     
 }

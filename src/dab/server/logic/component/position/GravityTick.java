@@ -5,34 +5,32 @@ import dab.common.physics.AABB;
 import dab.server.logic.component.Tickable_S;
 import dab.server.players.PlayerList;
 
-public class Movement implements Tickable_S {
+public class GravityTick implements Tickable_S {
 	
 	private PlayerList playerList;
 	
-	public Movement(PlayerList playerList) {
+	public GravityTick(PlayerList playerList) {
 		this.playerList = playerList;
 	}
 	
 	@Override
 	public void invoke() {
 		for (Player player : playerList.getPlayers()) {
-			if (MovementCollisionChecker.isPlayerMoving(player)) {
+			if (!MovementCollisionChecker.checkFuturePlayerGravityCollision(player)) {
 				updatePlayerPosition(player);
 			}
 		}
 	}
 	
 	private void updatePlayerPosition(Player player) {
-		AABB updatedAABB = MovementCollisionChecker.calculateNextPlayerAABB(player);
-		if (!MovementCollisionChecker.checkFuturePlayerZoneSolidCollision(player)) {
-			setPlayerAABB(player, updatedAABB);
-			player.setIsCenterModified(true);
-		}
+		AABB UpdatedAABB = MovementCollisionChecker.calculateNextPlayerGravityAABB(player);
+		setPlayerAABB(player, UpdatedAABB);
+		player.setIsCenterModified(true);
 	}
 	
 	private Player setPlayerAABB(Player player, AABB aabb) {
 		player.getAABB().copy(aabb);
 		return player;
 	}
-    
+	
 }
