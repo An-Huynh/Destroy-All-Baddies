@@ -12,7 +12,6 @@ import dab.server.players.PlayerList;
 
 public class GameServer implements Runnable {
 
-    
 	private SocketManager socketManager;
 	private GameLoop gameLoop;
 	private PlayerList playerList;
@@ -29,7 +28,6 @@ public class GameServer implements Runnable {
 	}
 	
 	public void preInit() {
-		
 		TileInitializer.preInit();
 		ZoneInitializer.preInit();
 		LoopComponentInitializer.preInit(socketManager, playerList);
