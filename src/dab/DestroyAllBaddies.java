@@ -5,6 +5,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import dab.client.GameClient;
+import dab.server.GameServer;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -152,32 +155,38 @@ implements ActionListener {
             nameField.setVisible(true);
             launchBothButton.setVisible(true);
         } else if("launchBoth".equals(e.getActionCommand())) {
-        	// Use Runtime and DABExec to execute the command line to run the server and client
+        	// Use Threads to Run the Server and Client simultaneously. Then wait for client, and the server to end.
         	try {
-        		//runTime.exec(DABExec.getServerExec());
-        		ServerExec server = new ServerExec();
-        		Thread serverThread = new Thread(server);
+        		Thread serverThread = new Thread(new Runnable() {
+        			public void run() {
+        				GameServer.main(null);
+        			}
+        		});
         		serverThread.start();
         		String[] args = {nameField.getText(), "localhost"};
-        		ClientExec client = new ClientExec(args);
-        		Thread clientThread = new Thread(client);
+        		Thread clientThread = new Thread(new Runnable() {
+        			public void run() {
+        				GameClient.main(args);
+        			}
+        		});
         		clientThread.start();
         		frame.setVisible(false);
         		clientThread.join();
         		serverThread.join();
         		System.exit(0);
-        		//runTime.exec(DABExec.getClientExec() + nameField.getText() + " localhost");
 			} catch (Exception e1) {
 				// Required
 				e1.printStackTrace();
 			}
         } else if("launchClient".equals(e.getActionCommand())) {
-        	// Use Runtime and DABExec to execute the command line to run the client
+        	// Use Threads to run the client, and then wait for the client to end
         	try {
-        		//runTime.exec(DABExec.getClientExec() + nameField.getText() + " " + IPAddressField.getText());
         		String[] args = {nameField.getText(), IPAddressField.getText()};
-        		ClientExec client = new ClientExec(args);
-        		Thread clientThread = new Thread(client);
+        		Thread clientThread = new Thread(new Runnable() {
+        			public void run() {
+        				GameClient.main(args);
+        			}
+        		});
         		clientThread.start();
         		frame.setVisible(false);
         		clientThread.join();
