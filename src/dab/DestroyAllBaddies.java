@@ -250,7 +250,11 @@ implements ActionListener {
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 
+        //Frame Icon
+        ImageIcon icon = createImageIcon("/resource/img/player/player.png");
+        
         //Display the window.
+        frame.setIconImage(icon.getImage());
         frame.setSize(300, 155);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
