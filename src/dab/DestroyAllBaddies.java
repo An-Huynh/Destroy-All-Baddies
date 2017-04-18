@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -18,117 +19,160 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class DestroyAllBaddies extends JPanel
 implements ActionListener {
-	protected JButton b1, b3, b2, b4;
-	protected JTextField t1, t2;
-	protected JLabel l1, l2;
+	protected JButton hostButton, joinButton, launchBothButton, launchClientButton;
+	protected JTextField IPAddressField, nameField;
+	protected JLabel welcomeLabel, dabLabel, IPAddressLabel, nameLabel;
 	
 	public DestroyAllBaddies() {
-		b1 = new JButton("Host");
-		Insets m = new Insets(10,10,10,10);
-		b1.setMargin(m);
-        b1.setVerticalAlignment(AbstractButton.CENTER);
-        b1.setHorizontalAlignment(AbstractButton.LEFT);
-        b1.setMnemonic(KeyEvent.VK_H);
-        b1.setActionCommand("host");
+		Insets m = new Insets(10,10,10,10); // Margin for all buttons
+		// Welcome Label Settings
+		welcomeLabel = new JLabel();
+		welcomeLabel.setText("Welcome to...");
+		
+		// DAB Label Settings
+		dabLabel = new JLabel();
+		dabLabel.setText("Destroy All Baddies!");	
+		
+		// Host Button Settings
+		hostButton = new JButton("Host");
+		hostButton.setMargin(m);
+        hostButton.setVerticalAlignment(AbstractButton.CENTER);
+        hostButton.setHorizontalAlignment(AbstractButton.CENTER);
+        hostButton.setMnemonic(KeyEvent.VK_H);
+        hostButton.setActionCommand("host");
+        hostButton.setPreferredSize(new Dimension(100,100));
+        
+        // Join Button Settings
+        joinButton = new JButton("Join");
+        joinButton.setLayout(null);
+        joinButton.setMargin(m);
+        joinButton.setVerticalAlignment(AbstractButton.CENTER);
+        joinButton.setHorizontalAlignment(AbstractButton.CENTER);
+        joinButton.setMnemonic(KeyEvent.VK_J);
+        joinButton.setActionCommand("join");
+        joinButton.setPreferredSize(new Dimension(100,100));
+        
+        // Launch Client and Server Button Settings
+        launchBothButton = new JButton("Launch");
+        launchBothButton.setMargin(m);
+        launchBothButton.setVerticalAlignment(AbstractButton.BOTTOM);
+        launchBothButton.setHorizontalAlignment(AbstractButton.CENTER);
+        launchBothButton.setMnemonic(KeyEvent.VK_L);
+        launchBothButton.setActionCommand("launchBoth");
+        launchBothButton.setVisible(false);
+        
+        // Launch Client Button Settings
+        launchClientButton = new JButton("Launch");
+        launchClientButton.setMargin(m);
+        launchClientButton.setVerticalAlignment(AbstractButton.BOTTOM);
+        launchClientButton.setHorizontalAlignment(AbstractButton.CENTER);
+        launchClientButton.setMnemonic(KeyEvent.VK_L);
+        launchClientButton.setActionCommand("launchClient");
+        launchClientButton.setVisible(false);
 
-        b3 = new JButton("Join");
-        b3.setMargin(m);
-        b3.setVerticalAlignment(AbstractButton.CENTER);
-        b3.setHorizontalAlignment(AbstractButton.RIGHT);
-        b3.setMnemonic(KeyEvent.VK_J);
-        b3.setActionCommand("join");
         
-        b2 = new JButton("Launch");
-        b2.setMargin(m);
-        b2.setVerticalAlignment(AbstractButton.BOTTOM);
-        b2.setHorizontalAlignment(AbstractButton.CENTER);
-        b2.setMnemonic(KeyEvent.VK_L);
-        b2.setActionCommand("launchBoth");
-        b2.setVisible(false);
-        
-        b4 = new JButton("Launch");
-        b4.setMargin(m);
-        b4.setVerticalAlignment(AbstractButton.BOTTOM);
-        b4.setHorizontalAlignment(AbstractButton.CENTER);
-        b4.setMnemonic(KeyEvent.VK_L);
-        b4.setActionCommand("launchClient");
-        b4.setVisible(false);
+        // Listen for actions on the buttons
+        hostButton.addActionListener(this);
+        launchBothButton.addActionListener(this);
+        joinButton.addActionListener(this);
+        launchClientButton.addActionListener(this);
 
-        //Listen for actions on the buttons
-        b1.addActionListener(this);
-        b2.addActionListener(this);
-        b3.addActionListener(this);
-        b4.addActionListener(this);
+        // Add tool tips
+        hostButton.setToolTipText("Click this button to host the game!");
+        launchBothButton.setToolTipText("Click this button to launch the server and game!");
+        joinButton.setToolTipText("Click this button to join a hosted game.");
+        launchClientButton.setToolTipText("Click this button to join the game!");
 
-        b1.setToolTipText("Click this button to host the game!");
-        b2.setToolTipText("Click this button to launch the server and game!");
-        b3.setToolTipText("Click this button to join a hosted game.");
-        b4.setToolTipText("Click this button to join the game!");
-
-        l1 = new JLabel();
-        l1.setText("IP Address:");
-        l1.setVisible(false);
-        l2 = new JLabel();
-        l2.setText("Character Name:");
-        l2.setVisible(false);
+        // IP Address Label Settings
+        IPAddressLabel = new JLabel();
+        IPAddressLabel.setText("IP Address:");
+        IPAddressLabel.setVisible(false);
+        // IP Address Field
+        IPAddressField = new JTextField(20);
+        IPAddressField.setVisible(false);
         
-        t1 = new JTextField(20);
-        t1.setVisible(false);
+        // Character Name Label Settings
+        nameLabel = new JLabel();
+        nameLabel.setText("Character Name:");
+        nameLabel.setVisible(false);
+        // Character Name Field
+        nameField = new JTextField(20);
+        nameField.setVisible(false);
         
-        t2 = new JTextField(20);
-        t2.setVisible(false);
-        
+        // Constraints for the two fields to take up more space
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.HORIZONTAL;
         
-        add(l1);
-        add(t1, c);
-        add(l2);
-        add(t2, c);
-        add(b1);
-        add(b2);
-        add(b3);
-        add(b4);
+        
+        // Add everything to the view
+        add(IPAddressLabel);
+        add(IPAddressField, c);
+        add(nameLabel);
+        add(nameField, c);
+        add(welcomeLabel);
+        add(dabLabel);
+        add(hostButton);
+        add(launchBothButton);
+        add(joinButton);
+        add(launchClientButton);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		Runtime runTime = Runtime.getRuntime();
         if ("join".equals(e.getActionCommand())) {
-            b3.setVisible(false);
-            remove(b3);
-            b1.setVisible(false);
-            remove(b1);
-            l1.setVisible(true);
-            t1.setVisible(true);
-            l2.setVisible(true);
-            t2.setVisible(true);
-            b4.setVisible(true);
+        	// Clear the screen and remove unused buttons
+            joinButton.setVisible(false);
+            remove(joinButton);
+            hostButton.setVisible(false);
+            remove(hostButton);
+            welcomeLabel.setVisible(false);
+            remove(welcomeLabel);
+            dabLabel.setVisible(false);
+            remove(dabLabel);
+            // Add the two fields and launch button
+            IPAddressLabel.setVisible(true);
+            IPAddressField.setVisible(true);
+            nameLabel.setVisible(true);
+            nameField.setVisible(true);
+            launchClientButton.setVisible(true);
         } else if("host".equals(e.getActionCommand())) {
-            b3.setVisible(false);
-            remove(b3);
-            b1.setVisible(false);
-            remove(b1);
-            l2.setVisible(true);
-            t2.setVisible(true);
-            b2.setVisible(true);
+        	// Clear the screen and remove unused buttons
+            joinButton.setVisible(false);
+            remove(joinButton);
+            hostButton.setVisible(false);
+            remove(hostButton);
+            welcomeLabel.setVisible(false);
+            remove(welcomeLabel);
+            dabLabel.setVisible(false);
+            remove(dabLabel);
+            // Add the field and launch button
+            nameLabel.setVisible(true);
+            nameField.setVisible(true);
+            launchBothButton.setVisible(true);
         } else if("launchBoth".equals(e.getActionCommand())) {
+        	// Use Runtime and DABExec to execute the command line to run the server and client
         	try {
         		runTime.exec(DABExec.getServerExec());
         		
-        		runTime.exec(DABExec.getClientExec() + t2.getText() + " localhost");
+        		runTime.exec(DABExec.getClientExec() + nameField.getText() + " localhost");
 			} catch (IOException e1) {
+				// Required
 				e1.printStackTrace();
 			} catch (Exception e1) {
+				// Required
 				e1.printStackTrace();
 			}
         	System.exit(0);
         } else if("launchClient".equals(e.getActionCommand())) {
+        	// Use Runtime and DABExec to execute the command line to run the client
         	try {
-        		runTime.exec(DABExec.getClientExec() + t2.getText() + " " + t1.getText());
+        		runTime.exec(DABExec.getClientExec() + nameField.getText() + " " + IPAddressField.getText());
 			} catch (IOException e1) {
+				// Required
 				e1.printStackTrace();
 			} catch (Exception e1) {
+				// Required
 				e1.printStackTrace();
 			}
         	System.exit(0);
