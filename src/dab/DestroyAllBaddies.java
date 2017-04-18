@@ -12,9 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -28,53 +26,63 @@ implements ActionListener {
 	protected static JFrame frame;
 	
 	public DestroyAllBaddies() {
-		Insets m = new Insets(10,10,10,10); // Margin for all buttons
 		// Welcome Label Settings
 		welcomeLabel = new JLabel();
 		welcomeLabel.setText("Welcome to...");
 		
 		// DAB Label Settings
 		dabLabel = new JLabel();
-		dabLabel.setText("Destroy All Baddies!");	
+		dabLabel.setText("Destroy All Baddies!");
+		
+		// Host Icon
+		ImageIcon hostIcon = createImageIcon("/resource/img/icon/host.png");
 		
 		// Host Button Settings
-		hostButton = new JButton("Host");
-		hostButton.setMargin(m);
-        hostButton.setVerticalAlignment(AbstractButton.CENTER);
-        hostButton.setHorizontalAlignment(AbstractButton.CENTER);
+		hostButton = new JButton("Host", hostIcon);
+        hostButton.setVerticalTextPosition(AbstractButton.BOTTOM);
+        hostButton.setHorizontalTextPosition(AbstractButton.CENTER);
         hostButton.setMnemonic(KeyEvent.VK_H);
         hostButton.setActionCommand("host");
-        hostButton.setPreferredSize(new Dimension(100,100));
+        hostButton.setFocusPainted(false);
+        
+        // Join Icon
+        ImageIcon joinIcon = createImageIcon("/resource/img/icon/join.png");
         
         // Join Button Settings
-        joinButton = new JButton("Join");
-        joinButton.setLayout(null);
-        joinButton.setMargin(m);
-        joinButton.setVerticalAlignment(AbstractButton.CENTER);
-        joinButton.setHorizontalAlignment(AbstractButton.CENTER);
+        joinButton = new JButton("Join", joinIcon);
+        joinButton.setVerticalTextPosition(AbstractButton.BOTTOM);
+        joinButton.setHorizontalTextPosition(AbstractButton.CENTER);
         joinButton.setMnemonic(KeyEvent.VK_J);
         joinButton.setActionCommand("join");
-        joinButton.setPreferredSize(new Dimension(100,100));
+        
+        // Play Icon
+        ImageIcon playIcon = createImageIcon("/resource/img/icon/play.png");
+        
+        // Play Filled Icon
+        ImageIcon playFilledIcon = createImageIcon("/resource/img/icon/playFilled.png");
         
         // Launch Client and Server Button Settings
-        launchBothButton = new JButton("Launch");
-        launchBothButton.setMargin(m);
+        launchBothButton = new JButton("Launch", playIcon);
         launchBothButton.setVerticalAlignment(AbstractButton.BOTTOM);
+        launchBothButton.setVerticalTextPosition(AbstractButton.BOTTOM);
         launchBothButton.setHorizontalAlignment(AbstractButton.CENTER);
+        launchBothButton.setHorizontalTextPosition(AbstractButton.CENTER);
         launchBothButton.setMnemonic(KeyEvent.VK_L);
         launchBothButton.setActionCommand("launchBoth");
+        launchBothButton.setRolloverIcon(playFilledIcon);
         launchBothButton.setVisible(false);
         
         // Launch Client Button Settings
-        launchClientButton = new JButton("Launch");
-        launchClientButton.setMargin(m);
+        launchClientButton = new JButton("Launch", playIcon);
         launchClientButton.setVerticalAlignment(AbstractButton.BOTTOM);
+        launchClientButton.setVerticalTextPosition(AbstractButton.BOTTOM);
         launchClientButton.setHorizontalAlignment(AbstractButton.CENTER);
+        launchClientButton.setHorizontalTextPosition(AbstractButton.CENTER);
         launchClientButton.setMnemonic(KeyEvent.VK_L);
         launchClientButton.setActionCommand("launchClient");
+        launchClientButton.setRolloverIcon(playFilledIcon);
         launchClientButton.setVisible(false);
-
-        
+  
         // Listen for actions on the buttons
         hostButton.addActionListener(this);
         launchBothButton.addActionListener(this);
@@ -91,6 +99,7 @@ implements ActionListener {
         IPAddressLabel = new JLabel();
         IPAddressLabel.setText("IP Address:");
         IPAddressLabel.setVisible(false);
+        
         // IP Address Field
         IPAddressField = new JTextField(20);
         IPAddressField.setVisible(false);
@@ -99,6 +108,7 @@ implements ActionListener {
         nameLabel = new JLabel();
         nameLabel.setText("Character Name:");
         nameLabel.setVisible(false);
+        
         // Character Name Field
         nameField = new JTextField(20);
         nameField.setVisible(false);
@@ -107,7 +117,6 @@ implements ActionListener {
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.HORIZONTAL;
-        
         
         // Add everything to the view
         add(IPAddressLabel);
@@ -122,8 +131,16 @@ implements ActionListener {
         add(launchClientButton);
 	}
 	
+	/**
+	 * 
+	 * Event Handler for the Buttons
+	 * 
+	 * @throws Exception could be thrown by Thread
+	 *  
+	 * @param e - ActionEvent - The action performed
+	 * 
+	 */
 	public void actionPerformed(ActionEvent e) {
-		//Runtime runTime = Runtime.getRuntime();
         if ("join".equals(e.getActionCommand())) {
         	// Clear the screen and remove unused buttons
             joinButton.setVisible(false);
@@ -140,6 +157,7 @@ implements ActionListener {
             nameLabel.setVisible(true);
             nameField.setVisible(true);
             launchClientButton.setVisible(true);
+            frame.setSize(300, 230);
         } else if("host".equals(e.getActionCommand())) {
         	// Clear the screen and remove unused buttons
             joinButton.setVisible(false);
@@ -154,6 +172,7 @@ implements ActionListener {
             nameLabel.setVisible(true);
             nameField.setVisible(true);
             launchBothButton.setVisible(true);
+            frame.setSize(300, 180);
         } else if("launchBoth".equals(e.getActionCommand())) {
         	// Use Threads to Run the Server and Client simultaneously. Then wait for client, and the server to end.
         	try {
@@ -170,7 +189,7 @@ implements ActionListener {
         			}
         		});
         		clientThread.start();
-        		frame.setVisible(false);
+        		frame.dispose();
         		clientThread.join();
         		serverThread.join();
         		System.exit(0);
@@ -188,7 +207,7 @@ implements ActionListener {
         			}
         		});
         		clientThread.start();
-        		frame.setVisible(false);
+        		frame.dispose();
         		clientThread.join();
 			} catch (Exception e1) {
 				// Required
@@ -198,7 +217,13 @@ implements ActionListener {
         }
     }
 
-    /** Returns an ImageIcon, or null if the path was invalid. */
+    /**
+     * Returns an ImageIcon, or null if the path was invalid.
+     * 
+     * @param path - String - The filepath of the image icon
+     * 
+     * @return an ImageIcon found at the path
+     */
     protected static ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = DestroyAllBaddies.class.getResource(path);
         if (imgURL != null) {
@@ -226,7 +251,7 @@ implements ActionListener {
         frame.setContentPane(newContentPane);
 
         //Display the window.
-        frame.setSize(300, 300);
+        frame.setSize(300, 155);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
