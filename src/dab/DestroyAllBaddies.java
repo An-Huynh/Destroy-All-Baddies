@@ -4,6 +4,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -14,7 +15,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class DestroyAllBaddies extends JPanel
@@ -22,6 +22,7 @@ implements ActionListener {
 	protected JButton hostButton, joinButton, launchBothButton, launchClientButton;
 	protected JTextField IPAddressField, nameField;
 	protected JLabel welcomeLabel, dabLabel, IPAddressLabel, nameLabel;
+	protected static JFrame frame;
 	
 	public DestroyAllBaddies() {
 		Insets m = new Insets(10,10,10,10); // Margin for all buttons
@@ -119,7 +120,7 @@ implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		Runtime runTime = Runtime.getRuntime();
+		//Runtime runTime = Runtime.getRuntime();
         if ("join".equals(e.getActionCommand())) {
         	// Clear the screen and remove unused buttons
             joinButton.setVisible(false);
@@ -153,24 +154,33 @@ implements ActionListener {
         } else if("launchBoth".equals(e.getActionCommand())) {
         	// Use Runtime and DABExec to execute the command line to run the server and client
         	try {
-        		runTime.exec(DABExec.getServerExec());
-        		
-        		runTime.exec(DABExec.getClientExec() + nameField.getText() + " localhost");
-			} catch (IOException e1) {
-				// Required
-				e1.printStackTrace();
+        		//runTime.exec(DABExec.getServerExec());
+        		ServerExec server = new ServerExec();
+        		Thread serverThread = new Thread(server);
+        		serverThread.start();
+        		String[] args = {nameField.getText(), "localhost"};
+        		ClientExec client = new ClientExec(args);
+        		Thread clientThread = new Thread(client);
+        		clientThread.start();
+        		frame.setVisible(false);
+        		clientThread.join();
+        		serverThread.join();
+        		System.exit(0);
+        		//runTime.exec(DABExec.getClientExec() + nameField.getText() + " localhost");
 			} catch (Exception e1) {
 				// Required
 				e1.printStackTrace();
 			}
-        	System.exit(0);
         } else if("launchClient".equals(e.getActionCommand())) {
         	// Use Runtime and DABExec to execute the command line to run the client
         	try {
-        		runTime.exec(DABExec.getClientExec() + nameField.getText() + " " + IPAddressField.getText());
-			} catch (IOException e1) {
-				// Required
-				e1.printStackTrace();
+        		//runTime.exec(DABExec.getClientExec() + nameField.getText() + " " + IPAddressField.getText());
+        		String[] args = {nameField.getText(), IPAddressField.getText()};
+        		ClientExec client = new ClientExec(args);
+        		Thread clientThread = new Thread(client);
+        		clientThread.start();
+        		frame.setVisible(false);
+        		clientThread.join();
 			} catch (Exception e1) {
 				// Required
 				e1.printStackTrace();
@@ -198,7 +208,7 @@ implements ActionListener {
     private static void createAndShowGUI() {
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Destroy All Baddies");
+        frame = new JFrame("Destroy All Baddies");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
