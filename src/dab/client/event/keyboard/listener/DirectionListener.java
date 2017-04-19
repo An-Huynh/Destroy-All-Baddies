@@ -8,6 +8,7 @@ import dab.client.event.keyboard.K_Observer;
 import dab.client.event.keyboard.KeyCallback;
 import dab.client.manager.ClientManager;
 import dab.common.entity.attribute.Direction;
+import dab.common.entity.attribute.JumpState;
 import dab.common.entity.player.Player;
 
 public class DirectionListener implements K_Observer {
@@ -22,6 +23,8 @@ public class DirectionListener implements K_Observer {
     public void update(int key, int action, int mods) {
     	if (isDirectionKey(key)) {
     		handleDirection();
+    	} else if (isSpaceBar(key)) {
+    		handleJump();
     	}
     }
     
@@ -77,4 +80,18 @@ public class DirectionListener implements K_Observer {
     	return clientManager.getPlayerList().getMainPlayer();
     }
 
+    private boolean isSpaceBar(int key) {
+    	if (key == GLFW.GLFW_KEY_SPACE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
+    private void handleJump() {
+    	Player mainPlayer = clientManager.getPlayerList().getMainPlayer();
+    	if (mainPlayer.getJumpState().equals(JumpState.GROUND)) {
+    		mainPlayer.setJumpState(JumpState.READY);
+    	}
+    }
 }

@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import dab.client.manager.ClientManager;
+import dab.common.entity.attribute.JumpState;
 import dab.common.entity.player.Player;
 
 public class ConnectionManager {
@@ -40,6 +41,7 @@ public class ConnectionManager {
     	conn.write("request.player.client");
     	conn.read();
     	clientManager.getPlayerList().getMainPlayer().copy((Player) conn.read()); 
+    	clientManager.getPlayerList().getMainPlayer().setJumpState(JumpState.GROUND);
     }
     
     public ClientManager getClientManager() {

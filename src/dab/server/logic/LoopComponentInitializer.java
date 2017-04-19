@@ -2,6 +2,7 @@ package dab.server.logic;
 
 import dab.server.logic.component.LocationUpdater;
 import dab.server.logic.component.position.GravityTick;
+import dab.server.logic.component.position.JumpTick;
 import dab.server.logic.component.position.Movement;
 import dab.server.logic.component.position.ZoneMover;
 import dab.server.network.SocketManager;
@@ -13,16 +14,19 @@ public class LoopComponentInitializer {
     private static LocationUpdater locationUpdater;
     private static GravityTick gravityTick;
     private static ZoneMover zoneMover;
+    private static JumpTick jumpTick;
     
 	public static void preInit(SocketManager socketManager, PlayerList playerList) {
 	    movement = new Movement(playerList);
 	    gravityTick = new GravityTick(playerList);
 	    locationUpdater = new LocationUpdater(playerList, socketManager);
 	    zoneMover = new ZoneMover(playerList, socketManager);
+	    jumpTick = new JumpTick(playerList);
 	}
 	
 	public static void init() {
 	    GameLoop.registerTickable(movement);
+	    GameLoop.registerTickable(jumpTick);
 	    GameLoop.registerTickable(gravityTick);
 	    GameLoop.registerTickable(locationUpdater);
 	    GameLoop.registerTickable(zoneMover);

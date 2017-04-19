@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import dab.common.entity.attribute.Direction;
+import dab.common.entity.attribute.JumpState;
 import dab.common.entity.player.Player;
 
 public class PlayerList {
@@ -44,6 +45,7 @@ public class PlayerList {
 		player.setLocation(1.5f, 20.0f);
 		player.setDirection(Direction.NONE);
 		player.setZone("dab:zone:start");
+		player.setJumpState(JumpState.GROUND);
 		return player;
 	}
 	

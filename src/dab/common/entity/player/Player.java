@@ -6,6 +6,8 @@ import org.joml.Vector2f;
 
 import dab.common.entity.Entity;
 import dab.common.entity.attribute.Direction;
+import dab.common.entity.attribute.JumpState;
+import dab.server.logic.component.position.MovementCollisionChecker;
 
 public class Player extends Entity implements Serializable {
 
@@ -14,6 +16,7 @@ public class Player extends Entity implements Serializable {
 	private String playerName;
 	private String currentZone;
 	private Direction direction;
+	private JumpState jumpState;
 	
 	// Constructor
 	public Player() {
@@ -38,6 +41,10 @@ public class Player extends Entity implements Serializable {
 	
 	public Direction getDirection() {
 		return this.direction;
+	}
+	
+	public JumpState getJumpState() {
+		return this.jumpState;
 	}
 	
 	public Vector2f getLocation() {
@@ -88,6 +95,19 @@ public class Player extends Entity implements Serializable {
 	
 	public void setIsDirectionModified(boolean isModified) {
 		setAttributeModifiedValue("direction", isModified);
+	}
+	
+	public void setJumpState(JumpState currentState) {
+		this.jumpState = currentState;
+	}
+	
+	public void iterateJumpState() {
+		jumpState = jumpState.getNextState();
+	}
+	
+	/* NOT SAFE FOR CLIENT SIDE USAGE*/
+	public boolean canJump() {
+		return MovementCollisionChecker.checkFuturePlayerGravityCollision(this);
 	}
 	
 	//etc

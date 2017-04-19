@@ -8,11 +8,11 @@ import org.joml.Vector2i;
 
 import dab.common.entity.attribute.Direction;
 import dab.common.entity.player.Player;
+import dab.common.logic.Collision;
 import dab.common.physics.AABB;
 import dab.common.registry.ZoneRegistry;
 import dab.common.tile.Tile;
 import dab.common.zone.Zone;
-import dab.common.logic.Collision;
 
 public class MovementCollisionChecker {
 
@@ -24,6 +24,11 @@ public class MovementCollisionChecker {
 	public static AABB calculateNextPlayerGravityAABB(Player player) {
 		AABB boundingBox = new AABB().copy(player.getAABB());
 		return updateAABBByDirection(boundingBox, Direction.DOWN);
+	}
+	
+	public static AABB calculateNextPlayerJumpAABB(Player player) {
+		AABB boundingBox = new AABB().copy(player.getAABB());
+		return updateAABBByDirection(boundingBox, Direction.UP, getPlayerJumpModifier(player));
 	}
 	
 	public static boolean checkPlayerZoneSolidCollision(Player player) {
@@ -67,9 +72,28 @@ public class MovementCollisionChecker {
 		return checkPlayerZoneSolidCollision(tempPlayer);
 	}
 	
+	public static boolean checkFuturePlayerJumpCollision(Player player) {
+		AABB possibleAABB = calculateNextPlayerJumpAABB(player);
+		Player tempPlayer = getPlayerCopy(player);
+		setPlayerAABB(tempPlayer, possibleAABB);
+		return checkPlayerZoneSolidCollision(tempPlayer);
+	}
+	
 	private static AABB updateAABBByDirection(AABB boundingBox, Direction direction) {
 		Vector2f offset = getOffsetByDirection(direction);
 		return addOffsetToAABB(boundingBox, offset);
+	}
+	
+	private static AABB updateAABBByDirection(AABB boundingBox, Direction direction, float movementScale) {
+		Vector2f offset = getOffsetByDirection(direction);
+		scaleOffsetVector(offset, movementScale);
+		return addOffsetToAABB(boundingBox, offset);
+	}
+	
+	private static Vector2f scaleOffsetVector(Vector2f offset, float offsetScaler) {
+		offset.x *= offsetScaler;
+		offset.y *= offsetScaler;
+		return offset;
 	}
 	
 	private static AABB addOffsetToAABB(AABB boundingBox, Vector2f offset) {
@@ -87,6 +111,9 @@ public class MovementCollisionChecker {
 				break;
 			case DOWN:
 				offset.set(0.0f, -0.1f);
+				break;
+			case UP:
+				offset.set(0.0f, 0.1f);
 				break;
 			default:
 				offset.set(0.0f, 0.0f);
@@ -167,6 +194,10 @@ public class MovementCollisionChecker {
 		Tile tile = getTileAtPlayerZone(playerZone, tileLocation);
 		AABB tileAABB = getTileAABBAtPlayerZone(playerZone, tileLocation);
 		return tile != null && checkAABBCollision(player.getAABB(), tileAABB);
+	}
+	
+	private static float getPlayerJumpModifier(Player player) {
+		return player.getJumpState().getJumpDistanceModifier();
 	}
 	
 	private static Player getPlayerCopy(Player player) {

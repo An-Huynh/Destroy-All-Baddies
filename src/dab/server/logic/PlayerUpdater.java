@@ -3,6 +3,7 @@ package dab.server.logic;
 import java.io.IOException;
 
 import dab.common.entity.attribute.Direction;
+import dab.common.entity.attribute.JumpState;
 import dab.common.entity.player.Player;
 import dab.server.network.ClientConnection;
 
@@ -30,6 +31,7 @@ public class PlayerUpdater implements Runnable {
 	
 	private void handleMessage() throws ClassNotFoundException, IOException {
 		String[] controlMessage = splitMessage((String) conn.readObject());
+		System.out.println(controlMessage[0] + controlMessage[1]);
 		if (controlMessage[0] != "") {
 			if (controlMessage[0].equals("request")) {
 				handleRequest(controlMessage[1]);
@@ -71,16 +73,25 @@ public class PlayerUpdater implements Runnable {
 		String[] controlMessage = splitMessage(message);
 		if (controlMessage[0].equals("")) {
 			updateSelf(controlMessage[1]);
+		} else if (controlMessage[0].equals("jump")) {
+			handleUpdateJump(controlMessage[1]);
 		}
 	}
 	
 	private void updateSelf(String message) throws ClassNotFoundException, IOException {
+		System.out.println(message);
 		if (message.equals("direction")) {
 			player.setDirection((Direction) conn.readObject());
-		}
-		if (message.equals("zone")) {
+		} else if (message.equals("zone")) {
 			player.setZone((String) conn.readObject());
 		}
 	}
 	
+	private void handleUpdateJump(String message) {
+		if (player.canJump() && player.getJumpState() == JumpState.GROUND) {
+			player.setJumpState(JumpState.READY);
+		}
+	}
+	
 }
+
