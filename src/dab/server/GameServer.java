@@ -94,11 +94,7 @@ public class GameServer implements Runnable {
 		GameServer gs = new GameServer(7720);
 		Thread gameThread = new Thread(gs);
 		gameThread.start();
-		
-		Scanner in = new Scanner(System.in);
-		while (!in.nextLine().equals("/stop")) {}
-		in.close();
-		gs.stop();
+		while (true);
 	}
 
 }

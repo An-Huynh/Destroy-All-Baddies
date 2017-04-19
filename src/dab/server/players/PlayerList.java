@@ -41,7 +41,7 @@ public class PlayerList {
 		Player player = new Player();
 		player.setName(playerName);
 		player.setHeight(1.0f);
-		player.setWidth(1.0f);
+		player.setWidth(0.6f);
 		player.setLocation(1.5f, 20.0f);
 		player.setDirection(Direction.NONE);
 		player.setZone("dab:zone:start");

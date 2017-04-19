@@ -117,11 +117,7 @@ public class GameClient implements Runnable {
         GameClient gc = new GameClient(args[0], args[1], 7720);
         Thread gameThread = new Thread(gc);
         gameThread.start();
-        
-        Scanner in = new Scanner(System.in);
-        while (!in.nextLine().equals("/stop")) {}
-        in.close();
-        gc.stop();
+        while (true);
     }
     
     

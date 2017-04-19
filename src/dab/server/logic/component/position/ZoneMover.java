@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dab.common.entity.player.Player;
+import dab.common.registry.TileRegistry;
 import dab.common.registry.ZoneRegistry;
 import dab.common.tile.Tile;
 import dab.common.zone.Zone;
@@ -23,32 +24,27 @@ public class ZoneMover implements Tickable_S {
 	}
 	
 	@Override
-	public void invoke(){
-		for(Player player : playerList.getPlayers()) {
-			sendZonetoAllPlayers(player);
-			ArrayList<Tile> collidedTiles = new ArrayList<Tile>();
-			if(MovementCollisionChecker.checkPlayerZoneCollisionIgnoreSolid(player)) {
-				collidedTiles = MovementCollisionChecker.getTilesCollidingWithPlayerIgnoreSolid(player);
-				for(Tile tile : collidedTiles) {
-					if(tile.getName().equals("dab:tile:movezoneblock")) {
-						Zone zone = ZoneRegistry.get(player.getZone());
-						for(int i = 0; i < 24; ++i) {
-							if(!zone.getLeftZone().equals("") && player.getLocation().x >= -1 && player.getLocation().x < 0) {
-								player.setZone(zone.getLeftZone());
-								player.setLocation(31, player.getLocation().y);
-								sendZonetoAllPlayers(player);
-							} else if(!zone.getRightZone().equals("") && player.getLocation().x <= 32 && player.getLocation().x > 31) {
-								player.setZone(zone.getRightZone());
-								player.setLocation(0, player.getLocation().y);
-								sendZonetoAllPlayers(player);
-								// TODO: Actually change the player's zone
-							}
-						}
+	public void invoke() {
+		for (Player player : playerList.getPlayers()) {
+			if (MovementCollisionChecker.checkPlayerZoneCollisionIgnoreSolid(player)) {
+				ArrayList<Tile> collidedTiles = MovementCollisionChecker.getTilesCollidingWithPlayerIgnoreSolid(player);
+				if (collidedTiles.contains(TileRegistry.get("dab:tile:movezoneblock"))) {
+					Zone zone = ZoneRegistry.get(player.getZone());
+					if(!zone.getLeftZone().equals("") && player.getLocation().x >= -1 && player.getLocation().x < 0) {
+						player.setZone(zone.getLeftZone());
+						player.setLocation(31, player.getLocation().y);
+						sendZonetoAllPlayers(player);
+					} else if(!zone.getRightZone().equals("") && player.getLocation().x <= 32 && player.getLocation().x > 31) {
+						player.setZone(zone.getRightZone());
+						player.setLocation(0, player.getLocation().y);
+						sendZonetoAllPlayers(player);
+						// TODO: Actually change the player's zone
 					}
 				}
 			}
 		}
 	}
+	
 	
 	private void sendZonetoAllPlayers(Player sourcePlayer) {
 		for (Player player : playerList.getPlayers()) {

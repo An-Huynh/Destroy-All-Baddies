@@ -79,7 +79,6 @@ public class PlayerUpdater implements Runnable {
 	}
 	
 	private void updateSelf(String message) throws ClassNotFoundException, IOException {
-		System.out.println(message);
 		if (message.equals("direction")) {
 			player.setDirection((Direction) conn.readObject());
 		} else if (message.equals("zone")) {
