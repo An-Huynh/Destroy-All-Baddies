@@ -10,6 +10,8 @@ public abstract class Zone {
 
 	private String name;
 	private Map<String, Tile> layout;
+	private String leftZone;
+	private String rightZone;
 	
 	// Constructor
 	
@@ -36,6 +38,14 @@ public abstract class Zone {
 		return null;
 	}
 	
+	public String getLeftZone() {
+		return this.leftZone;
+	}
+	
+	public String getRightZone() {
+		return this.rightZone;
+	}
+	
 	public boolean hasTileAtLocation(int x, int y) {
 		if (getTile(x, y) != null) {
 			return false;
@@ -53,11 +63,20 @@ public abstract class Zone {
 		this.layout.put(convertToKey(x, y), tile);
 	}
 	
+	protected void setLeftZone(String leftZone) {
+		this.leftZone = leftZone;
+	}
+	
+	protected void setRightZone(String rightZone) {
+		this.rightZone = rightZone;
+	}
+	
 	// etc
 	
 	public String convertToKey(int x, int y) {
 		return Integer.toString(x) + "." + Integer.toString(y);
 	}
+
 	
 	
 }

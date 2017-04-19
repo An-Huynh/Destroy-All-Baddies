@@ -1,7 +1,5 @@
 package dab.client.logic.components;
 
-import java.util.Iterator;
-
 import org.joml.Vector2f;
 
 import dab.client.graphic.renderRegistry.VariableRenderRegistry;
@@ -22,10 +20,13 @@ public class PlayerRenderer implements Tickable {
     
     @Override
     public void update() {
-    	Iterator<Player> players = clientManager.getPlayerList().getIteratorRemotePlayers();
-    	while (players.hasNext()) {
-    		setDrawCenter(players.next());
-    		renderPlayer();
+    	for(Player player : clientManager.getPlayerList().getRemotePlayers()) {
+    		if(player.getZone() != null) {
+	    		if(player.getZone().equals(clientManager.getPlayerList().getMainPlayer().getZone())) {
+	    			setDrawCenter(player);
+	    			renderPlayer();
+	    		}
+    		}
     	}
     	drawMainPlayer();
     }
