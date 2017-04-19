@@ -37,14 +37,36 @@ public class ClientUpdater implements Runnable {
         if (message.equals("request.heartbeat")) {
             conn.write("heartbeat");
         } else if (message.equals("update.player.client")) {
-            //Player player = (Player) conn.read();
-            //clientManager.getPlayerList().getMainPlayer().copy(player);
             clientManager.getPlayerList().setMainPlayer((Player) conn.read());
         } else if (message.equals("update.player.center")) {
         	handlePlayerLocationUpdate();
         } else if (message.equals("update.player.removal")) {
         	handlePlayerRemoval();
+        } else if (message.equals("update.player.zone")) {
+        	handlePlayerZoneUpdate();
         }
+    }
+    
+    public void handlePlayerZoneUpdate() throws ClassNotFoundException, IOException {
+    	String playerName = (String) conn.read();
+    	String zoneName = (String) conn.read();
+    	updatePlayerZone(playerName, zoneName);
+    }
+    
+    public void updatePlayerZone(String playerName, String zoneName) {
+    	if (isMainPlayer(playerName)) {
+    		clientManager.getPlayerList().getMainPlayer().setZone(zoneName);
+    		clientManager.getPlayerList().getMainPlayer().setIsZoneModified(true);
+    	} else {
+    		if(clientManager.getPlayerList().hasPlayer(playerName)) {
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setZone(zoneName);
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setIsZoneModified(true);
+    		} else {
+    			clientManager.getPlayerList().addRemotePlayer(new Player(playerName));
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setZone(zoneName);
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setIsZoneModified(true);
+    		}
+    	}
     }
     
     public void handlePlayerLocationUpdate() throws ClassNotFoundException, IOException {
