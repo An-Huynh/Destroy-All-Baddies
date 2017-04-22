@@ -157,9 +157,6 @@ implements ActionListener {
         launchBothButton.setToolTipText("Click this button to launch the server and game!");
         joinButton.setToolTipText("Click this button to join a hosted game.");
         launchClientButton.setToolTipText("Click this button to join the game!");
-        
-        // Add everything to the view 
-        
 	}
 	
 	/**
@@ -282,7 +279,7 @@ implements ActionListener {
         frame.setContentPane(newContentPane);
 
         //Frame Icon
-        ImageIcon icon = createImageIcon("/resource/img/player/player_green.png");
+        ImageIcon icon = createImageIcon("/resource/img/player/player.png");
         
         //Display the window.
         frame.setIconImage(icon.getImage());
