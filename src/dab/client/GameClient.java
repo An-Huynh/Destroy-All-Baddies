@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import dab.client.event.keyboard.listener.DirectionListener;
+import dab.client.event.mouse.listener.ClickListener;
 import dab.client.graphic.Display;
 import dab.client.graphic.initialization.RenderInitializer;
 import dab.client.graphic.initialization.VariableRenderInitializer;
@@ -51,6 +52,7 @@ public class GameClient implements Runnable {
         VariableRenderInitializer.init();
         
         display.registerKeyListener(new DirectionListener(clientManager));
+        display.registerMouseClickListener(new ClickListener(clientManager));
         
         LoopCycleInitializer.init(clientManager, connManager);
     }

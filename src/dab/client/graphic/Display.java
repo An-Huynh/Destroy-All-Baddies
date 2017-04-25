@@ -7,12 +7,15 @@ import org.lwjgl.opengl.GL30;
 
 import dab.client.event.keyboard.K_Observer;
 import dab.client.event.keyboard.KeyCallback;
+import dab.client.event.mouse.M_Observer;
+import dab.client.event.mouse.MouseClickCallback;
 import dab.client.event.window.resize.WindowSizeCallback;
 
 public class Display {
 
     private long window;
     private KeyCallback k_Callback;
+    private MouseClickCallback mc_Callback;
     
     private final float[] WHITE = {1.0f, 1.0f, 1.0f, 1.0f};
     
@@ -73,8 +76,18 @@ public class Display {
     
     private void setupCallbacks() {
         k_Callback = new KeyCallback();
+        mc_Callback = new MouseClickCallback();
+        GLFW.glfwSetMouseButtonCallback(window, mc_Callback);
         GLFW.glfwSetKeyCallback(window, k_Callback);
         GLFW.glfwSetWindowSizeCallback(window, new WindowSizeCallback());
+    }
+    
+    public void registerMouseClickListener(M_Observer observer) {
+    	mc_Callback.registerObserver(observer);
+    }
+    
+    public void removeMouseClickListener(M_Observer observer) {
+    	mc_Callback.unregisterObserver(observer);
     }
     
     public void registerKeyListener(K_Observer observer) {
