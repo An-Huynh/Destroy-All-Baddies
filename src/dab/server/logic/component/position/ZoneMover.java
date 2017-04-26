@@ -1,13 +1,11 @@
 package dab.server.logic.component.position;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import dab.common.entity.player.Player;
 import dab.common.registry.TileRegistry;
-import dab.common.registry.ZoneRegistry;
-import dab.common.tile.Tile;
-import dab.common.zone.Zone;
+import dab.common.tile.TileLocation;
 import dab.server.logic.component.Tickable_S;
 import dab.server.network.ClientConnection;
 import dab.server.network.SocketManager;
@@ -23,38 +21,31 @@ public class ZoneMover implements Tickable_S {
 		this.socketManager = socketManager;
 	}
 	
-	@Override
+	@Override 
 	public void invoke() {
 		for (Player player : playerList.getPlayers()) {
 			if (MovementCollisionChecker.checkPlayerZoneCollisionIgnoreSolid(player)) {
-				ArrayList<Tile> collidedTiles = MovementCollisionChecker.getTilesCollidingWithPlayerIgnoreSolid(player);
-				if (collidedTiles.contains(TileRegistry.get("dab:tile:movezoneblock"))) {
-					Zone zone = ZoneRegistry.get(player.getZone());
-					if(!zone.getLeftZone().equals("") && player.getLocation().x >= -1 && player.getLocation().x < 0) {
-						player.setZone(zone.getLeftZone());
-						player.setLocation(31, player.getLocation().y);
-						sendZonetoAllPlayers(player);
-					} else if(!zone.getRightZone().equals("") && player.getLocation().x <= 32 && player.getLocation().x > 31) {
-						player.setZone(zone.getRightZone());
-						player.setLocation(0, player.getLocation().y);
-						sendZonetoAllPlayers(player);
-						// TODO: Actually change the player's zone
-					}
+				List<TileLocation> locations = MovementCollisionChecker.getCollidingTeleporterLocations(player);
+				if (!locations.isEmpty()) {
+					TileLocation destination = TileRegistry.getTeleporter().getDestination(locations.get(0));
+					player.setZone(destination.getZone());
+					player.setLocation(destination.getLocationfv());
+					player.setIsCenterModified(true);
+					sendZoneUpdate(player);
 				}
 			}
 		}
 	}
 	
-	
-	private void sendZonetoAllPlayers(Player sourcePlayer) {
-		for (Player player : playerList.getPlayers()) {
-			sendZoneToPlayer(player.getName(), sourcePlayer);
+	private void sendZoneUpdate(Player player) {
+		for (Player client : playerList.getPlayers()) {
+			sendZoneUpdateToClient(player, client);
 		}
 	}
 	
-	private void sendZoneToPlayer(String remotePlayerName, Player player) {
-		ClientConnection conn = socketManager.getConnection(remotePlayerName);
-		synchronized (conn.getOut()) {
+	private void sendZoneUpdateToClient(Player player, Player client) {
+		ClientConnection conn = socketManager.getConnection(client.getName());
+		synchronized(conn.getOut()) {
 			try {
 				conn.writeObject("update.player.zone");
 				conn.writeObject(player.getName());
@@ -64,5 +55,5 @@ public class ZoneMover implements Tickable_S {
 			}
 		}
 	}
-
+	
 }

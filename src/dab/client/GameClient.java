@@ -2,7 +2,6 @@ package dab.client;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 import dab.client.event.keyboard.listener.DirectionListener;
 import dab.client.graphic.Display;

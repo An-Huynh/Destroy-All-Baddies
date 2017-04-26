@@ -83,6 +83,7 @@ public class ClientUpdater implements Runnable {
     			clientManager.getPlayerList().getRemotePlayer(playerName).setLocation(location);
     		} else {
     			clientManager.getPlayerList().addRemotePlayer(new Player(playerName));
+    			clientManager.getPlayerList().getRemotePlayer(playerName).setZone("dab:zone:start");
     			clientManager.getPlayerList().getRemotePlayer(playerName).setLocation(location);
     		}
     	}
