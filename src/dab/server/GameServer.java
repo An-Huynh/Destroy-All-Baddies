@@ -2,8 +2,10 @@ package dab.server;
 
 import java.io.IOException;
 
+import dab.common.entity.enemy.Zombie;
 import dab.common.initialization.TileInitializer;
 import dab.common.initialization.ZoneInitializer;
+import dab.common.registry.EnemyRegistry;
 import dab.server.logic.GameLoop;
 import dab.server.logic.LoopComponentInitializer;
 import dab.server.network.SocketManager;
@@ -11,9 +13,9 @@ import dab.server.players.PlayerList;
 
 public class GameServer implements Runnable {
 
-	private SocketManager socketManager;
+	public static SocketManager socketManager;
 	private GameLoop gameLoop;
-	private PlayerList playerList;
+	public static PlayerList playerList;
 	private int port;
 	
 	boolean running;
@@ -39,6 +41,8 @@ public class GameServer implements Runnable {
 	}
 	
 	public void postInit() throws IOException, InterruptedException {
+		EnemyRegistry.add(new Zombie("hi"));
+		
 		socketManager.start(port);
 	}
 	

@@ -99,7 +99,7 @@ public class SocketManager {
 		return connections.keySet();
 	}
 	
-	public Collection<ClientConnection> keyConnections() {
+	public Collection<ClientConnection> getConnections() {
 		return connections.values();
 	}
 	

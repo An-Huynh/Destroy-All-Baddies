@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.joml.Vector2f;
 
 import dab.client.network.ServerConnection;
+import dab.client.players.BotList;
 import dab.common.entity.player.Player;
 
 public class ClientUpdater implements Runnable {
@@ -44,6 +45,11 @@ public class ClientUpdater implements Runnable {
         	handlePlayerRemoval();
         } else if (message.equals("update.player.zone")) {
         	handlePlayerZoneUpdate();
+        } else if (message.equals("update.bot.zone")) {
+        	String name = (String) conn.read();
+        	BotList.bots.get(name).setZone((String) conn.read());
+        } else if (message.equals("update.bot.center")) {
+        	handleBotLocationUpdate();
         }
     }
     
@@ -108,6 +114,24 @@ public class ClientUpdater implements Runnable {
     
     public void stop() {
         running = false;
+    }
+    
+    public void handleBotLocationUpdate() throws ClassNotFoundException, IOException {
+       	String playerName = (String) conn.read();
+      	Vector2f location = (Vector2f) conn.read();
+     	updateBotLocation(playerName, location);
+    }
+    
+    public void updateBotLocation(String playerName, Vector2f location) {
+      	System.out.println(location.x + ":" + location.y);
+       	if (BotList.hasBot(playerName)) {
+       		BotList.getBot(playerName).setLocation(location);
+      	} else {
+      		Player bot = new Player(playerName);
+      		bot.setZone("dab:zone:start");
+      		BotList.addBot(bot);
+      		BotList.getBot(playerName).setLocation(location);
+      	}
     }
     
 }
