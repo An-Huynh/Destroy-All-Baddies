@@ -115,7 +115,8 @@ public class GameClient implements Runnable {
     }
     
     public static void main(String[] args) {
-        GameClient gc = new GameClient(args[0], args[1], 7720);
+        GameClient gc = new GameClient("fdi", "localhost", 7720);
+        //GameClient gc = new GameClient(args[0], args[1], 7720);
         Thread gameThread = new Thread(gc);
         gameThread.start();
         while (true);

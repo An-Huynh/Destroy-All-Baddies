@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 
 import dab.client.graphic.renderRegistry.VariableRenderRegistry;
 import dab.client.manager.ClientManager;
+import dab.client.players.BotList;
 import dab.common.entity.player.Player;
 import dab.common.loop.Tickable;
 
@@ -26,6 +27,14 @@ public class PlayerRenderer implements Tickable {
 	    			setDrawCenter(player);
 	    			renderPlayer();
 	    		}
+    		}
+    	}
+    	for (Player bot : BotList.getBots()) {
+    		if (bot.getZone() != null) {
+    			if (bot.getZone().equals(clientManager.getPlayerList().getMainPlayer().getZone())) {
+    				setDrawCenter(bot);
+    				renderPlayer();
+    			}
     		}
     	}
     	drawMainPlayer();

@@ -15,6 +15,7 @@ public class LoopComponentInitializer {
     private static GravityTick gravityTick;
     private static ZoneMover zoneMover;
     private static JumpTick jumpTick;
+    private static AIComponent aiComponent;
     
 	public static void preInit(SocketManager socketManager, PlayerList playerList) {
 	    movement = new Movement(playerList);
@@ -22,9 +23,11 @@ public class LoopComponentInitializer {
 	    locationUpdater = new LocationUpdater(playerList, socketManager);
 	    zoneMover = new ZoneMover(playerList, socketManager);
 	    jumpTick = new JumpTick(playerList);
+	    aiComponent = new AIComponent();
 	}
 	
 	public static void init() {
+		GameLoop.registerTickable(aiComponent);
 	    GameLoop.registerTickable(movement);
 	    GameLoop.registerTickable(jumpTick);
 	    GameLoop.registerTickable(gravityTick);
