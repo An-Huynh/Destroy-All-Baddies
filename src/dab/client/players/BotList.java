@@ -18,6 +18,10 @@ public class BotList {
 		bots.put(player.getName(), player);
 	}
 	
+	public static void removeBot(String name) {
+		bots.remove(name);
+	}
+	
 	public static boolean hasBot(String playerName) {
 		return bots.containsKey(playerName);
 	}

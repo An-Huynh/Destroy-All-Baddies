@@ -1,7 +1,6 @@
 package dab.common.initialization;
 
 import dab.common.registry.TileRegistry;
-import dab.common.tile.MoveZoneBlock;
 import dab.common.tile.SolidBlock;
 import dab.common.tile.TeleporterTile;
 

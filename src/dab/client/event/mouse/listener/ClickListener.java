@@ -1,21 +1,27 @@
 package dab.client.event.mouse.listener;
 
+import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
 
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
+import dab.client.GameClient;
 import dab.client.event.mouse.M_Observer;
-import dab.client.manager.ClientManager;
-import dab.common.entity.player.Player;
+import dab.client.network.ServerConnection;
 
 public class ClickListener implements M_Observer {
 	
-	private ClientManager clientManager;
+	private DoubleBuffer cursorX;
+	private DoubleBuffer cursorY;
+	private IntBuffer widthBuffer;
+	private IntBuffer heightBuffer;
+	private ServerConnection conn;
 	
-	public ClickListener(ClientManager clientManager) {
-		this.clientManager = clientManager;
+	public ClickListener(ServerConnection conn) {
+		this.conn = conn;
 	}
 
 	@Override
@@ -26,17 +32,22 @@ public class ClickListener implements M_Observer {
 	}
 	
 	private void handleLeftMouseClick(long window) {
-		Player mainPlayer = getPlayer();
-		DoubleBuffer b1 = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer b2 = BufferUtils.createDoubleBuffer(1);
-		GLFW.glfwGetCursorPos(window, b1, b2);
-		System.out.println("Mouse x: " + b1.get(0) + ", Mouse y: " + b2.get(0));
-		Vector2f playerPosition = mainPlayer.getCenter();
-		System.out.println("Player x: " + playerPosition.x + ", Player y: " + playerPosition.y);
+		cursorX = BufferUtils.createDoubleBuffer(1);
+		cursorY = BufferUtils.createDoubleBuffer(1);
+		widthBuffer = BufferUtils.createIntBuffer(1);
+		heightBuffer = BufferUtils.createIntBuffer(1);
+		GLFW.glfwGetCursorPos(window, cursorX, cursorY);
+		GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
+		int width = widthBuffer.get(0)/32;
+		int height = heightBuffer.get(0)/24;
+		try {
+			conn.write("update.event.shooting");
+			conn.write(new Vector2f((float)cursorX.get(0)/width, (float)(24 - (cursorY.get(0)/height))));
+			conn.write(GameClient.clientManager.getPlayerList().getMainPlayer().getLocation());
+			conn.write(GameClient.clientManager.getPlayerList().getMainPlayer().getZone());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
-	private Player getPlayer() {
-    	return clientManager.getPlayerList().getMainPlayer();
-    }
 
 }

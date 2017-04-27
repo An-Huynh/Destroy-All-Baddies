@@ -2,9 +2,13 @@ package dab.server.logic;
 
 import java.io.IOException;
 
+import org.joml.Vector2f;
+
 import dab.common.entity.attribute.Direction;
 import dab.common.entity.attribute.JumpState;
 import dab.common.entity.player.Player;
+import dab.common.logic.ShootingEvent;
+import dab.server.logic.component.EventUpdater;
 import dab.server.network.ClientConnection;
 
 public class PlayerUpdater implements Runnable {
@@ -75,9 +79,23 @@ public class PlayerUpdater implements Runnable {
 			updateSelf(controlMessage[1]);
 		} else if (controlMessage[0].equals("jump")) {
 			handleUpdateJump(controlMessage[1]);
+		} else if (controlMessage[0].equals("event")) {
+			handleEvent(controlMessage[1]);
 		}
 	}
 	
+	private void handleEvent(String message) throws ClassNotFoundException, IOException {
+		// Assume shooting
+		ShootingEvent shootingEvent = new ShootingEvent();
+		Vector2f destination = (Vector2f)conn.readObject();
+		Vector2f source = (Vector2f)conn.readObject();
+		String zone = (String)conn.readObject();
+		shootingEvent.setDestination(destination);
+		shootingEvent.setSource(source);
+		shootingEvent.setZone(zone);
+		EventUpdater.events.add(shootingEvent);
+	}
+
 	private void updateSelf(String message) throws ClassNotFoundException, IOException {
 		if (message.equals("direction")) {
 			player.setDirection((Direction) conn.readObject());

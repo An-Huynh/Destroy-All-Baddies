@@ -17,7 +17,7 @@ public class GameClient implements Runnable {
 
     private Display display;
     private ConnectionManager connManager;
-    private ClientManager clientManager;
+    public static ClientManager clientManager;
     private LoopCycle loopCycle;
     
     private boolean running;
@@ -51,7 +51,7 @@ public class GameClient implements Runnable {
         VariableRenderInitializer.init();
         
         display.registerKeyListener(new DirectionListener(clientManager));
-        display.registerMouseClickListener(new ClickListener(clientManager));
+        display.registerMouseClickListener(new ClickListener(connManager.getConnection()));
         
         LoopCycleInitializer.init(clientManager, connManager);
     }
@@ -115,8 +115,7 @@ public class GameClient implements Runnable {
     }
     
     public static void main(String[] args) {
-        GameClient gc = new GameClient("fdi", "localhost", 7720);
-        //GameClient gc = new GameClient(args[0], args[1], 7720);
+        GameClient gc = new GameClient(args[0], args[1], 7720);
         Thread gameThread = new Thread(gc);
         gameThread.start();
         while (true);

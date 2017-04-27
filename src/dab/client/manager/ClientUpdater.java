@@ -50,6 +50,9 @@ public class ClientUpdater implements Runnable {
         	BotList.bots.get(name).setZone((String) conn.read());
         } else if (message.equals("update.bot.center")) {
         	handleBotLocationUpdate();
+        } else if (message.equals("update.bot.removal")) {
+        	String name = (String) conn.read();
+        	BotList.removeBot(name);
         }
     }
     
@@ -123,7 +126,7 @@ public class ClientUpdater implements Runnable {
     }
     
     public void updateBotLocation(String playerName, Vector2f location) {
-      	System.out.println(location.x + ":" + location.y);
+      	//System.out.println(location.x + ":" + location.y);
        	if (BotList.hasBot(playerName)) {
        		BotList.getBot(playerName).setLocation(location);
       	} else {
