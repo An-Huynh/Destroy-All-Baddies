@@ -1,7 +1,6 @@
 package dab.server;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import dab.common.initialization.TileInitializer;
 import dab.common.initialization.ZoneInitializer;

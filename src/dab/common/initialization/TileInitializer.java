@@ -3,19 +3,20 @@ package dab.common.initialization;
 import dab.common.registry.TileRegistry;
 import dab.common.tile.MoveZoneBlock;
 import dab.common.tile.SolidBlock;
+import dab.common.tile.TeleporterTile;
 
 public class TileInitializer {
 	
 	private static SolidBlock solidBlock;
-	private static MoveZoneBlock moveZoneBlock;
+	private static TeleporterTile teleporterTIle;
 	
 	public static void preInit() {
 		solidBlock = new SolidBlock();
-		moveZoneBlock = new MoveZoneBlock();
+		teleporterTIle = new TeleporterTile();
 	}
 	
 	public static void init() {
 		TileRegistry.register(solidBlock);
-		TileRegistry.register(moveZoneBlock);
+		TileRegistry.register(teleporterTIle);
 	}
 }

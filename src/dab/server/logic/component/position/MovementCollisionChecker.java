@@ -2,6 +2,8 @@ package dab.server.logic.component.position;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -12,6 +14,7 @@ import dab.common.logic.Collision;
 import dab.common.physics.AABB;
 import dab.common.registry.ZoneRegistry;
 import dab.common.tile.Tile;
+import dab.common.tile.TileLocation;
 import dab.common.zone.Zone;
 
 public class MovementCollisionChecker {
@@ -63,7 +66,19 @@ public class MovementCollisionChecker {
 	public static ArrayList<Tile> getTilesCollidingWithPlayerIgnoreSolid(Player player) {
 		ArrayList<Vector2i> possibleCollisionTileLocations = getPossiblePlayerCollisionArea(player);
 		return getEachCollidingTile(player, possibleCollisionTileLocations);
-  }
+    }
+	
+	public static List<TileLocation> getCollidingTeleporterLocations(Player player) {
+		Zone zone = ZoneRegistry.get(player.getZone());
+		return getPossiblePlayerCollisionArea(player)
+			       .stream()
+			       .filter(loc -> zone.getTile(loc.x, loc.y) != null)
+			       .filter(loc -> zone.getTile(loc.x, loc.y).getName().equals("dab:tile:teleporter"))
+			       .filter(loc -> Collision.testCollision(player.getAABB(), zone.getTileAABB(loc.x, loc.y)))
+			       .map(loc -> new TileLocation(zone.getName(), loc.x, loc.y))
+			       .collect(Collectors.toList());
+				                               
+	}
 
 	public static boolean checkFuturePlayerGravityCollision(Player player) {
 		AABB possibleAABB = calculateNextPlayerGravityAABB(player);

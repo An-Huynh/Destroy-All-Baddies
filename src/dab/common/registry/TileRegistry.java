@@ -3,6 +3,7 @@ package dab.common.registry;
 import java.util.HashMap;
 import java.util.Map;
 
+import dab.common.tile.TeleporterTile;
 import dab.common.tile.Tile;
 
 public class TileRegistry {
@@ -15,6 +16,10 @@ public class TileRegistry {
 	
 	public static Tile get(String tileName) {
 		return tileList.get(tileName);
+	}
+	
+	public static TeleporterTile getTeleporter() {
+		return (TeleporterTile) tileList.get("dab:tile:teleporter");
 	}
 	
 }
