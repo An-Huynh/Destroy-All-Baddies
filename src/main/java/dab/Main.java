@@ -18,6 +18,15 @@ import javax.swing.JTextField;
 import dab.client.Client;
 import dab.server.Server;
 
+/**
+ * This class is the main class of Destroy All Baddies. This
+ * class launch a GUI for a user to either host a game or connect
+ * to another friend's game. It then launches threads of the
+ * appropriate classes. This thread then just waits for those
+ * threads to finish and then exits.
+ * 
+ * @author Eli Irvin
+ */
 @SuppressWarnings("serial")
 public class Main extends JPanel
 implements ActionListener {
@@ -296,6 +305,12 @@ implements ActionListener {
         frame.setVisible(true);
     }
 
+    /**
+     * Main function for the Main class. Creates a thread that will
+     * schedule a job to create and show the GUI.
+     * 
+     * @param args - the command line arguments
+     */
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

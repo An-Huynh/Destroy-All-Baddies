@@ -12,6 +12,8 @@ import dab.common.entity.Enemy;
  *  Enemy Objects and classes that derive an Enemy.
  *  It can be used to add, remove, and get an Enemy as
  *  well as methods to get Collections and/or iterators
+ *  
+ *  @author Eli Irvin
  */
 public class EnemyList
 {
@@ -20,7 +22,7 @@ public class EnemyList
 	/**
 	 * Default constructor
 	 * 
-	 * initializes enemies map container
+	 * Initializes an empty map for the EnemyList
 	 */
 	public EnemyList()
 	{
@@ -28,10 +30,10 @@ public class EnemyList
 	}
 	
 	/**
-	 * Add an Enemy to the map keyed
-	 * by the Enemy's name which is unique to itself
+	 * Adds an Enemy to the map keyed
+	 * by the Enemy's name which is unique
 	 * 
-	 * @param enemy
+	 * @param enemy - the enemy being added
 	 */
 	public void add(Enemy enemy)
 	{
@@ -39,10 +41,10 @@ public class EnemyList
 	}
 	
 	/**
-	 * get an Enemy in the list keyed by a Name
+	 * Get an Enemy in the list keyed by a Name
 	 * unique to the enemy
 	 * 
-	 * @param name
+	 * @param name - the name of the enemy
 	 * 
 	 * @return an Enemy Object if the name is in the list
 	 *         or null otherwise
@@ -53,10 +55,10 @@ public class EnemyList
 	}
 	
 	/**
-	 * remove an enemy keyed by name from the list
+	 * Remove an enemy keyed by name from the list
 	 * if found in the list
 	 * 
-	 * @param name
+	 * @param name - the name of the enemy
 	 */
 	public void remove(String name)
 	{
@@ -64,13 +66,13 @@ public class EnemyList
 	}
 	
 	/**
-	 * function to determine whether an Enemy object is stored
-	 * in enemies list or not
+	 * Determines whether an Enemy object is stored
+	 * in the enemies list or not
 	 * 
-	 * @param enemy
+	 * @param enemy - the enemy to search for
 	 * 
-	 * @return true if enemy is found in the list
-	 *         false if enemy is not found
+	 * @return True if enemy is found in the list |
+	 *         False if enemy is not found
 	 */
 	public boolean hasEnemy(Enemy enemy)
 	{
@@ -78,13 +80,13 @@ public class EnemyList
 	}
 	
 	/**
-	 * function to determine whether an Enemy object is stored
+	 * Determines whether an Enemy object is stored
 	 * in enemies list or not
 	 * 
-	 * @param name
+	 * @param name - the name of the enemy
 	 * 
-	 * @return true if enemy is found in the list
-	 *         false if enemy is not found
+	 * @return True if enemy is found in the list |
+	 *         False if enemy is not found
 	 */
 	public boolean hasEnemy(String name)
 	{
@@ -92,7 +94,7 @@ public class EnemyList
 	}
 	
 	/**
-	 * get a Collection that holds the names of the Enemy stored
+	 * Gets a Collection that holds the names of the Enemy stored
 	 * in the list
 	 * 
 	 * @return Collection of Enemy names
@@ -103,7 +105,7 @@ public class EnemyList
 	}
 	
 	/**
-	 * get a Collection of Enemies stored in the list
+	 * Gets a Collection of Enemies stored in the list
 	 * 
 	 * @return Collection of Enemy objects
 	 */
@@ -113,9 +115,9 @@ public class EnemyList
 	}
 	
 	/**
-	 * get an Iterator to the Enemies in the list
+	 * Get an Iterator to the Enemies in the list
 	 * 
-	 * @return iterator to enemies in the list
+	 * @return Iterator to enemies in the list
 	 */
 	public Iterator<Enemy> getEnemyIterator()
 	{
@@ -123,9 +125,9 @@ public class EnemyList
 	}
 	
 	/**
-	 * get an Iterator to the Enemies in the list
+	 * Get an Iterator to the Enemies in the list
 	 * 
-	 * @return iterator to enemies in the list
+	 * @return Iterator to enemies in the list
 	 */
 	public Iterator<String> getEnemyNameIterator()
 	{

@@ -1,5 +1,12 @@
 package dab.common.entity.attributes;
 
+/**
+ * The enumerable the creates the arc of the jump.
+ * Each piece of arc is associated with a float that
+ * determines the players y position.
+ * 
+ * @author Eli Irvin
+ */
 public enum JumpState
 {	
 	GROUND(0.0f),
@@ -23,16 +30,32 @@ public enum JumpState
 	
 	private float distanceModifier;
 	
+	/**
+	 * Constructor for the JumpState
+	 * 
+	 * @param distanceModifier - the height of the jump in this state
+	 */
 	JumpState(float distanceModifier)
 	{
 		this.distanceModifier = distanceModifier;
 	}
 	
+	/**
+	 * Gets the current distance modifier
+	 * 
+	 * @return distanceModifier
+	 */
 	public float getDistanceModifier()
 	{
 		return distanceModifier;
 	}
 	
+	/**
+	 * Gets the next JumpState based on the current
+	 * position of the JumpState
+	 * 
+	 * @return - the next JumpState
+	 */
 	public JumpState getNext()
 	{
 		JumpState next;

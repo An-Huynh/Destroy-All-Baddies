@@ -12,17 +12,36 @@ import org.lwjgl.glfw.GLFW;
 import dab.client.Client;
 import dab.common.entity.attributes.Direction;
 
+
+/**
+ * Observer from the Observer design pattern that is
+ * listening for keypresses. This is primarily used
+ * to handle directions and jumping from the player
+ * and other entities.
+ * 
+ * @author Eli Irvin
+ */
 public class KeyListener implements KeyboardObserver
 {
 	private List<Integer> directionKeys;
 	private Map<Integer, Direction> keyDirectionMap;
 	
+	/**
+	 * Default constructor for the KeyListener.
+	 * Calls the two setup methods.
+	 */
 	public KeyListener()
 	{
 		setupDirectionKeyList();
 		setupKeyDirectionMap();
 	}
 	
+	/**
+	 * Updates the observer by first checking what kind of key was
+	 * pressed. If it is a direction key, then it calls that method.
+	 * If it is the space key and is being pressed, then it handles
+	 * for a jump.
+	 */
 	@Override
 	public void update(int key, int action, int mods)
 	{
@@ -36,6 +55,10 @@ public class KeyListener implements KeyboardObserver
 		}
 	}
 	
+	/**
+	 * Handles a jump request. Simply sends to the server that the jump
+	 * key was pressed for this client. The server will then handle it.
+	 */
 	private void handleJumpRequest()
 	{
 		try
@@ -48,11 +71,24 @@ public class KeyListener implements KeyboardObserver
 		}
 	}
 	
+	/**
+	 * Checks for whether the key that the action was done upon is one of the direction keys
+	 * 
+	 * @param key - the key being sent through the update
+	 * 
+	 * @return True if the key is a direction key | False otherwise
+	 */
 	private boolean isDirectionKey(int key)
 	{
 		return directionKeys.contains(key);
 	}
 	
+	/**
+	 * Sends to the server updates to update the direction of this client.
+	 * If they are pressing a single direction key, it will send an update
+	 * for the player to go in that direction. If more than 1 key, or no keys
+	 * are pressed, it will send an update for the direction to be nowhere.
+	 */
 	private void updateClientDirection()
 	{
 		if (getNumDirectionKeysPressed() == 1)
@@ -81,6 +117,13 @@ public class KeyListener implements KeyboardObserver
 		}
 	}
 	
+	/**
+	 * Gets the number of directions keys currently being pressed.
+	 * Go through each direction key and calls the isKeyPressed method.
+	 * Counts each of the keys for which that method returns true.
+	 * 
+	 * @return The number of directions keys currently pressed.
+	 */
 	private int getNumDirectionKeysPressed()
 	{
 		return (int) directionKeys.stream()
@@ -88,6 +131,13 @@ public class KeyListener implements KeyboardObserver
 				                  .count();
 	}
 	
+	/**
+	 * Gets the single direction key that is being pressed. Filters all
+	 * the currently pressed keys, and returns the first one.
+	 * 
+	 * @return A single direction key, the first one in the list of keys
+	 *         being pressed.
+	 */
 	private int getSingleDirectionKey()
 	{
 		return directionKeys.stream()
@@ -96,11 +146,20 @@ public class KeyListener implements KeyboardObserver
 				            .get(0);
 	}
 	
+	/**
+	 * Gets the Direction attribute that connects to the single
+	 * direction key that is currently being pressed
+	 * 
+	 * @return a Direction is the currently pressed Direction key.
+	 */
 	private Direction getSingleDirection()
 	{
 		return keyDirectionMap.get(getSingleDirectionKey());
 	}
 	
+	/**
+	 * Adds all of the keys that fit as a direction key to the list.
+	 */
 	private void setupDirectionKeyList()
 	{
 		directionKeys = new ArrayList<Integer>();
@@ -114,6 +173,10 @@ public class KeyListener implements KeyboardObserver
 		directionKeys.add(GLFW.GLFW_KEY_A);
 	}
 	
+	/**
+	 * Maps each of the keys with a Direction from the
+	 * Direction enum.
+	 */
 	private void setupKeyDirectionMap()
 	{
 		keyDirectionMap = new TreeMap<Integer, Direction>();
