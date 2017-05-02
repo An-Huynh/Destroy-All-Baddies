@@ -1,0 +1,39 @@
+import org.gradle.internal.os.OperatingSystem
+apply plugin: 'java'
+
+switch ( OperatingSystem.current() ) {
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+	break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.lwjgl:lwjgl:3.1.1"
+	compile "org.lwjgl:lwjgl-glfw:3.1.1"
+	compile "org.lwjgl:lwjgl-opengl:3.1.1"
+	runtime "org.lwjgl:lwjgl:3.1.1:${lwjglNatives}"
+	runtime "org.lwjgl:lwjgl-glfw:3.1.1:${lwjglNatives}"
+	runtime "org.lwjgl:lwjgl-opengl:3.1.1:${lwjglNatives}"
+	compile "org.joml:joml:1.9.2"
+}
+
+sourceSets {
+	main.java.srcDir 'src.main.java'
+	main.resources.srcDir 'src.main.resources'
+}
+
+task run(dependsOn: 'build', type: JavaExec) {
+	standardInput = System.in
+	main = 'dab.Main'
+	classpath = sourceSets.main.runtimeClasspath
+}
