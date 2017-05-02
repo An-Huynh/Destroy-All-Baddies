@@ -4,6 +4,8 @@ import org.joml.Vector2f;
 
 import dab.common.entity.Zombie;
 import dab.server.Server;
+import dab.server.world.tile.TileInitializer;
+import dab.server.world.zone.ZoneInitializer;
 
 public class WorldInitializer
 {
@@ -12,6 +14,9 @@ public class WorldInitializer
 	
 	public static void initialize()
 	{
+		TileInitializer.initialize();
+		ZoneInitializer.initialize();
+		
 		addZombie("dab:zone:graveyard", 22, 1);
 		addZombie("dab:zone:hell", 5, 5);
 		addZombie("dab:zone:hell", 6, 6);

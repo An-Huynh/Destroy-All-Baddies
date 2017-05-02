@@ -9,9 +9,7 @@ import dab.server.entity.PlayerList;
 import dab.server.logic.ComponentInitializer;
 import dab.server.network.ClientManager;
 import dab.server.world.WorldInitializer;
-import dab.server.world.tile.TileInitializer;
 import dab.server.world.tile.TileRegistry;
-import dab.server.world.zone.ZoneInitializer;
 import dab.server.world.zone.ZoneRegistry;
 
 public class Server implements Runnable
@@ -101,21 +99,18 @@ public class Server implements Runnable
 	private void init()
 	{
 		System.out.println("Initializing Server");
-		tileRegistry = new TileRegistry();
-		zoneRegistry = new ZoneRegistry();
-		
-		TileInitializer.initialize();
-		ZoneInitializer.initialize();
-		
-		gameLoop = new GameLoop();
-		ComponentInitializer.initialize();
-		
 		playerList = new PlayerList();
 		enemyList = new EnemyList();
 		clientManager = new ClientManager();
 		eventQueue = new EventQueue();
 		
+		tileRegistry = new TileRegistry();
+		zoneRegistry = new ZoneRegistry();
+		
 		WorldInitializer.initialize();
+		
+		gameLoop = new GameLoop();
+		ComponentInitializer.initialize();
 	}
 	
 	
