@@ -9,8 +9,23 @@ import dab.common.logic.Component;
 import dab.server.Server;
 import dab.server.network.ClientConnection;
 
+/**
+ * This class is for syncing server and client side
+ * data about Entities such as Players and Enemies.
+ * If any Entity attribute has been changed, the Entity
+ * is send to all clients to update their information.
+ */
 public class Updater implements Component
 {
+	/**
+	 * Iterator through all players and enemies and write
+	 * to clients all that have been modified by checking
+	 * if entity.isDirty() evaluates to true
+	 * If so, write the entity to each client to update
+	 * their version's state
+	 * 
+	 * @author An Huynh
+	 */
 	@Override
 	public void invoke()
 	{
@@ -37,6 +52,11 @@ public class Updater implements Component
 		}
 	}
 	
+	/**
+	 * Write a Player Object to all clients
+	 * 
+	 * @param player
+	 */
 	private void sendPlayerUpdateToAll(Player player)
 	{
 		Iterator<ClientConnection> conns = Server.getClientManager().getConnectionIterator();
@@ -53,6 +73,11 @@ public class Updater implements Component
 		}
 	}
 	
+	/**
+	 * Write an Enemy Object to all Clients
+	 * 
+	 * @param enemy
+	 */
 	private void sendEnemyUpdateToAll(Enemy enemy)
 	{
 		Iterator<ClientConnection> conns = Server.getClientManager().getConnectionIterator();
