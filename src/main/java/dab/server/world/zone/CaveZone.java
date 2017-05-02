@@ -3,12 +3,12 @@ package dab.server.world.zone;
 import dab.server.Server;
 import dab.server.world.tile.TileLocation;
 
-public class HomeZone extends Zone
+public class CaveZone extends Zone
 {
-	public HomeZone()
+	public CaveZone()
 	{
 		super();
-		setID("dab:zone:home");
+		setID("dab:zone:cave");
 		
 		// add top and bottom
 		for (int x = 0; x < 12; ++x)
@@ -28,7 +28,7 @@ public class HomeZone extends Zone
 		for (int y = 0; y < 9; ++y)
 		{
 			addTile(Server.getTileRegistry().get("dab:tile:teleporter"), 12, y);
-			addTeleporter(new TileLocation("dab:zone:home", 12, y), rightSideDest);
+			addTeleporter(new TileLocation("dab:zone:cave", 12, y), rightSideDest);
 		}
 	}
 }

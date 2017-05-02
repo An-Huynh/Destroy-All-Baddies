@@ -18,7 +18,7 @@ public class StartZone extends Zone
 			addTile(Server.getTileRegistry().get("dab:tile:solid"), x, 24);
 		}
 		
-		TileLocation leftSideDest = new TileLocation("dab:zone:home", 11, 1);
+		TileLocation leftSideDest = new TileLocation("dab:zone:cave", 11, 1);
 		for (int y = 0; y < 24; ++y)
 		{
 			addTile(Server.getTileRegistry().get("dab:tile:teleporter"), -1, y);
