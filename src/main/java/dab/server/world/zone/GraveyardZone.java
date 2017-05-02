@@ -2,14 +2,22 @@ package dab.server.world.zone;
 
 import dab.server.Server;
 import dab.server.world.tile.TileLocation;
-
+/**
+ * initializes blocks and teleporters for
+ * the graveyard zone
+ * 
+ * @author Cristopher Huerta
+ */
 public class GraveyardZone extends Zone
 {
+	/**
+	* constructor handles initialization of zone
+	 */
 	public GraveyardZone()
 	{
 		super();
 		
-		setID("dab:zone:graveyard");
+		setID("dab:zone:graveyard");// sets ID for zone
 		
 		// add top row
 		for (int x = 0; x < 32; ++x)
@@ -40,7 +48,7 @@ public class GraveyardZone extends Zone
 			addTile(Server.getTileRegistry().get("dab:tile:solid"), 32, y);
 		}
 		
-		// add graves
+		// add blocks graves
 		addTile(Server.getTileRegistry().get("dab:tile:solid"), 8, 1);
 		addTile(Server.getTileRegistry().get("dab:tile:solid"), 8, 2);
 		
@@ -53,6 +61,7 @@ public class GraveyardZone extends Zone
 		addTile(Server.getTileRegistry().get("dab:tile:solid"), 14, 1);
 		addTile(Server.getTileRegistry().get("dab:tile:solid"), 14, 2);
 		
+		//add teleport down to hell
 		TileLocation hellDest = new TileLocation("dab:zone:hell", 1, 23);
 		for (int x = 26; x < 28; ++x)
 		{

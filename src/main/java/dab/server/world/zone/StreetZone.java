@@ -2,13 +2,21 @@ package dab.server.world.zone;
 
 import dab.server.Server;
 import dab.server.world.tile.TileLocation;
-
+/**
+ * initializes blocks and teleporters for
+ * the street zone extending abstract zone class
+ * 
+ * @author Cristopher Huerta
+ */
 public class StreetZone extends Zone
 {
+	/**
+	* constructor handles initialization of zone
+	 */
 	public StreetZone()
 	{
 		super();
-		setID("dab:zone:street");
+		setID("dab:zone:street");//set id of zone
 		
 		// add ground layer
 		addTile(Server.getTileRegistry().get("dab:tile:solid"), 0, 0);
@@ -30,7 +38,7 @@ public class StreetZone extends Zone
 			addTile(Server.getTileRegistry().get("dab:tile:solid"), 32, y);
 		}
 		
-		// add teleporter
+		// add teleporter for falling down to hell zone
 		TileLocation sewerDestination = new TileLocation("dab:zone:hellexit", 27, 22);
 		for (int x = 1; x < 3; ++x)
 		{

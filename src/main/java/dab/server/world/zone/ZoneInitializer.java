@@ -4,6 +4,10 @@ import dab.server.Server;
 
 public class ZoneInitializer
 {
+	/*
+	 * adds all zones to be used into zone registry
+	 * 
+	*/
 	public static void initialize()
 	{
 		Server.getZoneRegistry().register(new StartZone());

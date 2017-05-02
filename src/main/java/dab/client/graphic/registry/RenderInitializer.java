@@ -3,7 +3,11 @@ package dab.client.graphic.registry;
 import dab.client.Client;
 import dab.client.graphic.drawable.EntityDrawable;
 import dab.client.graphic.drawable.ZoneDrawable;
-
+/* this class is used for initializing the drawable
+ * backgrounds for each zone
+ * 
+ * @author Cristopher Huerta
+ */
 public class RenderInitializer
 {
 	public static void initialize()

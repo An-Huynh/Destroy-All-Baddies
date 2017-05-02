@@ -2,14 +2,22 @@ package dab.server.world.zone;
 
 import dab.server.Server;
 import dab.server.world.tile.TileLocation;
-
+/**
+ * initializes blocks and teleporters for
+ * the night zone extending abstract zone class
+ * 
+ * @author Cristopher Huerta
+ */
 public class NightZone extends Zone
 {
+	/**
+	* constructor handles initialization of zone
+	 */
 	public NightZone()
 	{
 		super();
 		
-		setID("dab:zone:night");
+		setID("dab:zone:night");//set id of zone
 		
 		// add ground and top layer
 		for (int x = 0; x < 32; ++x)

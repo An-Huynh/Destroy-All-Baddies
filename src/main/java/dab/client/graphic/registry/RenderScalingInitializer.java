@@ -1,9 +1,17 @@
 package dab.client.graphic.registry;
 
 import dab.client.Client;
-
+/**
+ * initializes dimensions of each zone
+ * 
+ * @author Cristopher Huerta
+ */
 public class RenderScalingInitializer
 {
+	/**
+	* registers the block dimensions of
+	* each zone given zone id and dimension data
+	*/
 	public static void initialize()
 	{
 		Client.getRenderScalingRegistry().register("dab:zone:start", 32, 24);
